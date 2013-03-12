@@ -1,0 +1,88 @@
+cd /run/media/smed/ADAMFLASH/Thesis/Aspirator/spray\ condensation/
+ls
+python2 sprayCondensation3.py 
+python2 sprayCondensation3.py 
+python2 sprayCondensation3.py 
+python2 sprayCondensation3.py 
+python2 sprayCondensation3.py 
+python2 sprayCondensation3.py 
+man ln
+cd ../../..
+cd applications/solvers/lagrangian/sprayCondensationFoam/
+./Allwmake 
+ls
+mkdir lnInclude
+cd lnInclude/
+ls
+cp -r ~/Downloads/freesteam .
+ls
+cd ..
+ls
+./Allwmake 
+ls
+cd ../sprayCondensation_parallel/
+ls
+rm -r processor*
+ls
+./parallel.sh 
+ls
+ls
+ls
+rm -r processo*
+ls
+./parallel.sh 
+ls processor1/
+cd ../sprayCondensation
+ls
+cd ../..
+ls
+cd applications/
+ls
+cd solvers/lagrangian/sprayCondensationFoam/
+ls
+./Allwmake 
+source ~/.zshrc 
+./Allwmake 
+cd ../../applications/solvers/lagrangian/sprayCondensationFoam
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+cd ../../../..
+cd src/lagrangian/
+./Allwmake 
+cd applications/solvers/lagrangian/sprayCondensationFoam/
+ls
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+ls
+cd src/lagrangian/intermediate/lnInclude/
+ls
+ls
+cd applications/solvers/lagrangian/sprayCondensationFoam/
+ls
+./Allwmake 
+./Allwmake 
+cd src/lagrangian/
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
+./Allwmake 
