@@ -2,7 +2,7 @@
 exec i3
 
 # Load Xresources file
-[[ -f ~/.Xresources ]] && xrdb ~/.Xresources
+[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 
 # Cyberpower UPS daemon
 /usr/sbin/pwrstatd
