@@ -1,3 +1,15 @@
+XTerm*metaSendsEscape : true
+
+! Disable urxvt scrollbar
+URxvt.scrollBar: false
+
+URxvt.font: xft:Terminus
+
+URxvt.background: Black
+URxvt.foreground: White
+
+URxvt.termName : rxvt-256color
+
 *color0 : #282a2e
 *color1 : #A54242
 *color2 : #8C9440
@@ -15,7 +27,7 @@
 *color14 : #8abeb7
 *color15 : #c5c8c6
 
-# Infinality font rendering
+! Infinality font rendering
 Xft.autohint: 0
 Xft.lcdfilter:  lcddefault
 Xft.hintstyle:  hintfull

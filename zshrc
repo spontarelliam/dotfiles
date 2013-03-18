@@ -46,10 +46,14 @@ export GIT_COMMITTER_NAME="Adam S"
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/smed/Downloads/freesteam-2.0
 export LD_LIBRARY_PATH
 
-TERM=xterm-256color
-
 # Load infinality font rendering
 #. ~/path/to/this/file/infinality-settings.sh
+setfont /usr/share/local/
 
 # Fix Firefox font rendering by disabling PANGO
 export MOZ_DISABLE_PANGO=1
+
+# Bind Keys
+bindkey "^[[7~" beginning-of-line
+bindkey "^[[8~" end-of-line
+bindkey "\e[3~" delete-char
