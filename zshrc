@@ -24,8 +24,8 @@ export EDITOR="emacs"
 #-----------------------------
 # Dircolors
 #-----------------------------
-LS_COLORS='rs=0:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:ex=01;32:';
-export LS_COLORS
+#LS_COLORS='rs=0:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:ex=01;32:';
+#export LS_COLORS
 
 #------------------------------
 # Prompt
@@ -36,9 +36,13 @@ prompt suse
 alias ls='ls --color=auto'
 
 # Arch message of the day
-cat $HOME/Documents/archmotd
+if [ -d "$HOME/Documents/archmotd" ]; then
+    cat $HOME/Documents/archmotd
+fi
 
-source $HOME/OpenFOAM/OpenFOAM-2.1.1/etc/bashrc
+if [ -d "$HOME/OpenFOAM/OpenFOAM-2.1.1/etc" ]; then
+    source $HOME/OpenFOAM/OpenFOAM-2.1.1/etc/bashrc
+fi
 
 export GIT_AUTHOR_NAME="Adam S"
 export GIT_COMMITTER_NAME="Adam S"
@@ -57,3 +61,28 @@ export MOZ_DISABLE_PANGO=1
 bindkey "^[[7~" beginning-of-line
 bindkey "^[[8~" end-of-line
 bindkey "\e[3~" delete-char
+
+# Ensure non-window emacs mode
+alias emacs='emacs -nw'
+
+# SERVER
+#------------------
+autoload -U compinit promptinit
+compinit
+promptinit
+ 
+# This will set the default prompt to the walters theme
+prompt redhat
+
+
+alias emacs='emacs -nw'
+
+alias ls='ls --color=auto'
+
+export TERM=xterm-256color
+
+if [[ -n ${INSIDE_EMACS} ]]; then
+    # This shell runs inside an Emacs *shell*/*term* buffer.
+    prompt walters
+    unsetopt zle
+fi
