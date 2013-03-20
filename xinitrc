@@ -1,5 +1,5 @@
-#exec gnome-session-cinnamon
-exec i3
+exec gnome-session-cinnamon
+#exec i3
 
 # Load Xresources file
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
@@ -15,5 +15,5 @@ quicktile.py -d
 
 modprobe vboxdrv
 
-xset +fp /usr/share/fonts/local
-xset fp rehash
+#xset +fp /usr/share/fonts/local
+#xset fp rehash

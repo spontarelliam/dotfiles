@@ -31,3 +31,9 @@
 (add-to-list 'load-path "~/.emacs.d")
 (require 'i3)
 (require 'i3-integration)
+
+;; Save all backup files to /tmp
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
