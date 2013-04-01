@@ -67,10 +67,22 @@ alias emacs='emacs -nw'
 
 # SERVER
 #------------------
+autoload -U compinit promptinit
+compinit
+promptinit
+ 
+# This will set the default prompt to the walters theme
+prompt redhat
+
+
+alias emacs='emacs -nw'
+
+alias ls='ls --color=auto'
+
 export TERM=xterm-256color
 
 if [[ -n ${INSIDE_EMACS} ]]; then
     # This shell runs inside an Emacs *shell*/*term* buffer.
-    prompt suse
+    prompt walters
     unsetopt zle
 fi
