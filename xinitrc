@@ -1,6 +1,3 @@
-exec gnome-session-cinnamon
-#exec i3
-
 # Load Xresources file
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 
@@ -11,9 +8,12 @@ exec gnome-session-cinnamon
 /home/smed/Downloads/conky/conky_start.sh
 
 # Enable tiling of windows with ctrl+alt+keypad
-quicktile.py -d
+#quicktile.py -d
 
-modprobe vboxdrv
+#modprobe vboxdrv
 
 #xset +fp /usr/share/fonts/local
 #xset fp rehash
+
+#exec gnome-session-cinnamon
+exec i3
