@@ -1,0 +1,6 @@
+;; -*- emacs-lisp -*- <13/07/23 10:22:50 /home/aspontar/.emacs.d/tramp>
+;; Tramp connection history.  Don't change this file.
+;; You can delete it, forcing Tramp to reapply the checks.
+
+((["scpc" nil "nmon" nil nil]
+  nil))
