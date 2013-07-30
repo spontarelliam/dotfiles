@@ -17,7 +17,7 @@ SAVEHIST=1000
 # Variables
 #------------------------------
 export BROWSER="firefox"
-export EDITOR="emacs"
+export EDITOR="emacs -nw"
 #export PAGER="vimpager"
 #export PATH="${PATH}:${HOME}/bin:${HOME}/.cabal/bin"
 
@@ -33,7 +33,10 @@ export EDITOR="emacs"
 autoload -U colors && colors
 prompt suse
 
-alias ls='ls --color=auto'
+# use ls --color if not using a dumb terminal. Meant for emacs
+if [ "$TERM" != "dumb" ]; then
+  alias ls='ls --color=auto'
+fi
 
 # Arch message of the day
 if [ -d "$HOME/Documents/archmotd" ]; then
@@ -63,26 +66,13 @@ bindkey "^[[8~" end-of-line
 bindkey "\e[3~" delete-char
 
 # Ensure non-window emacs mode
-alias emacs='emacs -nw'
+alias emacs='emacs24.3 -nw'
+alias emacsold='/usr/bin/emacs -nw'
 
 # SERVER
 #------------------
-autoload -U compinit promptinit
-compinit
-promptinit
- 
-# This will set the default prompt to the walters theme
-prompt redhat
-
-
-alias emacs='emacs -nw'
-
-alias ls='ls --color=auto'
-
 export TERM=xterm-256color
 
-if [[ -n ${INSIDE_EMACS} ]]; then
-    # This shell runs inside an Emacs *shell*/*term* buffer.
-    prompt walters
-    unsetopt zle
-fi
+export TZ="/usr/share/zoneinfo/America/New_York"
+
+alias tree='~/Downloads/tree/bin/tree --charset=ASCII'
