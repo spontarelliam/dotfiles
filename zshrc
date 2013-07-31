@@ -65,14 +65,29 @@ bindkey "^[[7~" beginning-of-line
 bindkey "^[[8~" end-of-line
 bindkey "\e[3~" delete-char
 
-# Ensure non-window emacs mode
-alias emacs='emacs24.3 -nw'
-alias emacsold='/usr/bin/emacs -nw'
+# Enable numlock on startup. Effective after login.
+setleds -D +num
 
-# SERVER
 #------------------
-export TERM=xterm-256color
+# GERMAN SERVER
+#------------------
+if [ hostname -eq spselc3a ]; then 
+   # Ensure non-window emacs mode
+   alias emacs='emacs24.3 -nw'
+   alias emacsold='/usr/bin/emacs -nw'
 
-export TZ="/usr/share/zoneinfo/America/New_York"
+   export TERM=xterm-256color
 
-alias tree='~/Downloads/tree/bin/tree --charset=ASCII'
+   export TZ="/usr/share/zoneinfo/America/New_York"
+
+   alias tree='~/Downloads/tree/bin/tree --charset=ASCII'
+
+   if [[ -n ${INSIDE_EMACS} ]]; then
+       # This shell runs inside an Emacs *shell*/*term* buffer.
+       prompt walters
+       unsetopt zle
+   fi	
+fi
+
+
+

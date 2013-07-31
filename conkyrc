@@ -80,3 +80,5 @@ ${upspeedgraph enp0s20}
 ULS:${upspeed ath0} kb/s $alignr total: ${totalup ath0}
 
 #${font :size=12}${alignc}Power Usage: ${execpi 30 ~/power.sh}${font}${color}
+${color}Core 1:  ${cpu cpu1}% $alignr ${exec sensors | grep "CPU " | cut --bytes=23-28}
+${color}Temperature ${alignr} ${color2}${nvidia temp}${color} C

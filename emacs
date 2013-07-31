@@ -1,8 +1,8 @@
 (add-to-list 'load-path "~/.emacs.d/")
-(require 'color-theme)
+;(require 'color-theme)
 
 ;; Load the 256 color hack for Emacs ver 21
-(load "emacs21-256color-hack.el")
+;(load "emacs21-256color-hack.el")
 
 ;; Solarized color theme
 (add-to-list 'load-path "~/.emacs.d/colors/emacs-color-theme-solarized-master")
@@ -72,15 +72,39 @@
 ;;(require 'git-gutter)
 
 ;; Set mark region color to yellow
-(set-face-background 'region "yellow")
+;;(set-face-background 'region "yellow")
 
-;; automatically save eshell history and stop annoying me
-;; (load "em-hist") ; So the history vars are defined
-;; (if (boundp 'eshell-save-history-on-exit)
-;;     (setq eshell-save-history-on-exit t)) ; Don't ask, just save
-;; ;(message "eshell-ask-to-save-history is %s" eshell-ask-to-save-history)
-;; (if (boundp 'eshell-ask-to-save-history)
-;;     (setq eshell-ask-to-save-history 'always)) ; For older(?) version
-;; ;(message "eshell-ask-to-save-history is %s" eshell-ask-to-save-history)
+automatically save eshell history and stop annoying me
+(load "em-hist") ; So the history vars are defined
+(if (boundp 'eshell-save-history-on-exit)
+    (setq eshell-save-history-on-exit t)) ; Don't ask, just save
+;(message "eshell-ask-to-save-history is %s" eshell-ask-to-save-history)
+(if (boundp 'eshell-ask-to-save-history)
+    (setq eshell-ask-to-save-history 'always)) ; For older(?) version
+;(message "eshell-ask-to-save-history is %s" eshell-ask-to-save-history)
 
 (require 'magit)
+
+;; Flyspell
+(autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
+(autoload 'flyspell-delay-command "flyspell" "Delay on command." t) 
+(autoload 'tex-mode-flyspell-verify "flyspell" "" t) 
+;; Enable flyspell automatically in Latex mode
+(add-hook 'latex-mode-hook 'flyspell-mode)
+(add-hook 'tex-mode-hook 'flyspell-mode)
+
+;; Erc Nick Colors
+(require 'erc-hl-nicks)
+
+;; Erc hide join messages
+(setq erc-hide-list '("JOIN" "PART" "QUIT"))
+
+;; Disable the toolbar and menubar
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+
+;; Enable mouse zooming of images
+(global-set-key [C-mouse-4] 'text-scale-increase)
+(global-set-key [C-mouse-5] 'text-scale-decrease)
+
