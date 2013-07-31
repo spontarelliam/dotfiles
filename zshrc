@@ -63,7 +63,7 @@ bindkey "^[[8~" end-of-line
 bindkey "\e[3~" delete-char
 
 # Ensure non-window emacs mode
-alias emacs='emacs -nw'
+#alias emacs='emacs -nw'
 
 # SERVER
 #------------------
@@ -74,9 +74,6 @@ promptinit
 # This will set the default prompt to the walters theme
 prompt redhat
 
-
-alias emacs='emacs -nw'
-
 alias ls='ls --color=auto'
 
 export TERM=xterm-256color
@@ -86,3 +83,7 @@ if [[ -n ${INSIDE_EMACS} ]]; then
     prompt walters
     unsetopt zle
 fi
+
+# Enable numlock on startup. Effective after login.
+setleds -D +num
+
