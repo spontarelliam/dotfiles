@@ -1,6 +1,10 @@
-;; -*- emacs-lisp -*- <13/07/23 10:22:50 /home/aspontar/.emacs.d/tramp>
+;; -*- emacs-lisp -*-
 ;; Tramp connection history.  Don't change this file.
 ;; You can delete it, forcing Tramp to reapply the checks.
 
-((["scpc" nil "nmon" nil nil]
-  nil))
+((["sudo" "root" "localhost" nil]
+  ("uname" "Linux 3.2.0-4-amd64")
+  ("test" "test")
+  ("remote-path"
+   ("/bin" "/usr/bin" "/usr/sbin" "/usr/local/bin"))
+  ("remote-shell" "/bin/sh")))
