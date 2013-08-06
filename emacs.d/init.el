@@ -1,3 +1,8 @@
+;; -------------------------------
+;; Emacs initialization file
+;; -------------------------------
+;;
+
 (add-to-list 'load-path "~/.emacs.d/")
 ;(require 'color-theme)
 
