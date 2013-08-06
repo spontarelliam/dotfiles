@@ -111,3 +111,7 @@
 (global-set-key [C-mouse-4] 'text-scale-increase)
 (global-set-key [C-mouse-5] 'text-scale-decrease)
 
+(require 'sunrise-commander)
+
+(setq shell-file-name "zshrc")
+(setq shell-command-switch "-ic")
