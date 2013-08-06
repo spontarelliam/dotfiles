@@ -2,12 +2,11 @@
 ;; Emacs initialization file
 ;; -------------------------------
 ;;
-
 (add-to-list 'load-path "~/.emacs.d/")
 ;(require 'color-theme)
 
 ;; Load the 256 color hack for Emacs ver 21
-;;(load "emacs21-256color-hack.el")
+;(load "emacs21-256color-hack.el")
 
 ;; Solarized color theme
 (add-to-list 'load-path "~/.emacs.d/colors/emacs-color-theme-solarized")
@@ -115,4 +114,41 @@
 ;; Enable mouse zooming of images
 (global-set-key [C-mouse-4] 'text-scale-increase)
 (global-set-key [C-mouse-5] 'text-scale-decrease)
+
+;; Fortran settings
+(setq fortran-do-indent 2)
+(setq fortran-if-indent 2)
+(setq fortran-continuation-indent 4)
+(setq fortran-line-number-indent 4)
+(setq fortran-comment-line-start "!")
+(setq fortran-continuation-string "&")
+(setq fortran-comment-indent-style nil)
+
+;; Enable IDO mode for buffer switching
+(ido-mode 1)
+(setq ido-enable-flex-matching t)
+
+
+
+(defun delete-word (arg)
+  "Delete characters forward until encountering the end of a word.
+With argument, do this that many times."
+  (interactive "p")
+  (delete-region (point) (progn (forward-word arg) (point))))
+
+(defun backward-delete-word (arg)
+  "Delete characters backward until encountering the end of a word.
+With argument, do this that many times."
+  (interactive "p")
+  (delete-word (- arg)))
+
+(global-set-key (read-kbd-macro "<M-DEL>") 'backward-delete-word)
+
+;; Rebind M-d so that it deletes instead of kills.
+;; This prevents addition to the kill ring.
+(global-unset-key (kbd "M-d"))
+(global-set-key (kbd "M-d") 'delete-word)
+
+(add-to-list 'load-path "~/.emacs.d/switch-window-master")
+(require 'switch-window)
 
