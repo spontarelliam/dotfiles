@@ -1,5 +1,5 @@
 # Load Xresources file
-#[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
+[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 
 # Cyberpower UPS daemon
 /usr/sbin/pwrstatd
@@ -16,7 +16,7 @@
 numlockx &
 
 # Exec pulseaudio 
-/usr/bin/start-pulseaudio-x11
+#/usr/bin/start-pulseaudio-x11
 
 #exec gnome-session-cinnamon
 exec i3

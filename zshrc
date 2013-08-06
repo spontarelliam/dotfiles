@@ -86,4 +86,3 @@ if [[ $HOSTNAME = "spselc3a" ]]; then
        unsetopt zle
    fi	
 fi
-
