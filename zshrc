@@ -17,7 +17,7 @@ SAVEHIST=1000
 # Variables
 #------------------------------
 export BROWSER="firefox"
-export EDITOR="emacs -nw"
+export EDITOR="emacsclient"
 #export PAGER="vimpager"
 #export PATH="${PATH}:${HOME}/bin:${HOME}/.cabal/bin"
 
@@ -86,3 +86,8 @@ if [[ $HOSTNAME = "spselc3a" ]]; then
        unsetopt zle
    fi	
 fi
+
+export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
+source /opt/intel/bin/compilervars.sh intel64
+alias ifort='/opt/intel/composer_xe_2013.5.192/bin/intel64/ifort'
+alias idbc='/opt/intel/composer_xe_2013.5.192/bin/intel64/idbc'
