@@ -17,7 +17,7 @@ SAVEHIST=1000
 # Variables
 #------------------------------
 export BROWSER="firefox"
-export EDITOR="emacs -nw"
+export EDITOR="emacsclient"
 #export PAGER="vimpager"
 #export PATH="${PATH}:${HOME}/bin:${HOME}/.cabal/bin"
 
