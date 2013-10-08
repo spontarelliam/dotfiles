@@ -123,6 +123,7 @@
 (setq fortran-continuation-indent 4)
 (setq fortran-line-number-indent 4)
 (setq fortran-comment-line-start "!")
+(setq fortran-comment-region "!")
 (setq fortran-continuation-string "&")
 (setq fortran-comment-indent-style nil)
 
@@ -153,3 +154,7 @@ With argument, do this that many times."
 (require 'switch-window)
 
 (require 'sunrise-commander)
+
+;; This forces ediff to split windows vertically. Yes, the nomenclature
+;; backwards.
+(setq ediff-split-window-function 'split-window-horizontally)

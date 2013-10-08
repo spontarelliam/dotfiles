@@ -69,7 +69,6 @@ bindkey "\e[3~" delete-char
 # GERMAN SERVER
 #------------------
 if [[ $HOSTNAME = "spselc3a" ]]; then 
-   echo "Working on " $HOSTNAME
    # Ensure non-window emacs mode
    alias emacs='emacs24.3 -nw'
    alias emacsold='/usr/bin/emacs -nw'
