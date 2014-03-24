@@ -1,3 +1,4 @@
+#!/bin/zsh
 #------------------------------
 # Comp stuff
 #------------------------------
@@ -47,6 +48,9 @@ if [ -d "$HOME/OpenFOAM/OpenFOAM-2.1.1/etc" ]; then
     source $HOME/OpenFOAM/OpenFOAM-2.1.1/etc/bashrc
 fi
 
+# Background
+feh --bg-scale /usr/share/archlinux/wallpaper/archlinux-simplyblack.png
+
 export GIT_AUTHOR_NAME="Adam S"
 export GIT_COMMITTER_NAME="Adam S"
 
@@ -56,10 +60,13 @@ export LD_LIBRARY_PATH
 # Fix Firefox font rendering by disabling PANGO
 export MOZ_DISABLE_PANGO=1
 
+alias fritzing='$HOME/Downloads/fritzing-0.8.0b.linux.AMD64/Fritzing'
+
 # Bind Keys
 bindkey "^[[7~" beginning-of-line
 bindkey "^[[8~" end-of-line
 bindkey "\e[3~" delete-char
+setxkbmap -option ctrl:nocaps  # Make Caps Lock a Control key
 
 # Enable numlock on startup. Effective after login.
 # causes error on some machines
@@ -86,3 +93,10 @@ if [[ $HOSTNAME = "spselc3a" ]]; then
        unsetopt zle
    fi	
 fi
+
+# added by Anaconda 1.8.0 installer
+#export PATH="/opt/anaconda/bin:$PATH"
+
+# eval $(ssh-agent)
+# ssh-add
+

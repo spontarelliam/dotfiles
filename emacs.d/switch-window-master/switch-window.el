@@ -171,7 +171,9 @@ ask user for the window where move to"
       (call-interactively 'other-window)
     (progn
       (let ((index (prompt-for-selected-window "Move to window: ")))
-        (apply-to-window-index 'select-window index "Moved to %S")))))
+        (apply-to-window-index 'select-window index "Moved to %S"))))
+;;loop through each window and run to end of buffer if already at end of buffer
+)
 
 (defun prompt-for-selected-window (prompt-message)
   "Display an overlay in each window showing a unique key, then

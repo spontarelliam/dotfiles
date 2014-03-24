@@ -70,6 +70,9 @@
 ;; Associate Fortran mode with *.s files
 (setq auto-mode-alist (cons '("\\.s$" . fortran-mode) auto-mode-alist))
 
+;; Associate C-mode with *.ino files
+(setq auto-mode-alist (cons '("\\.ino$" . c-mode) auto-mode-alist))
+
 ;; Show column number
 (setq column-number-mode t)
 
@@ -128,8 +131,6 @@
 (ido-mode 1)
 (setq ido-enable-flex-matching t)
 
-
-
 (defun delete-word (arg)
   "Delete characters forward until encountering the end of a word.
 With argument, do this that many times."
@@ -152,3 +153,42 @@ With argument, do this that many times."
 (add-to-list 'load-path "~/.emacs.d/switch-window-master")
 (require 'switch-window)
 
+(require 'chm-view)
+
+;; (setq browse-url-browser-function 'w3m-browse-url)
+;;  (autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
+;;  ;; optional keyboard short-cut
+;;  (global-set-key "\C-xm" 'browse-url-at-point)
+
+;(require 'traverselisp)
+;(require 'eiv)
+
+(defun set-exec-path-from-shell-PATH ()
+  (let ((path-from-shell (replace-regexp-in-string
+                          "[ \t\n]*$"
+                          ""
+                          (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
+    (setenv "PATH" path-from-shell)
+    (setq eshell-path-env path-from-shell) ; for eshell users
+    (setq exec-path (split-string path-from-shell path-separator))))
+
+(when window-system (set-exec-path-from-shell-PATH))
+
+
+;; Python IDE
+(setenv "PYMACS_PYTHON" "python2")
+(add-to-list 'load-path "/home/smed/.emacs.d/python-mode.el-6.1.2")
+(setq py-install-directory "/home/smed/.emacs.d/python-mode.el-6.1.2")
+(require 'python-mode)
+(autoload 'pymacs-apply "pymacs")
+(autoload 'pymacs-call "pymacs")
+(autoload 'pymacs-eval "pymacs" nil t)
+(autoload 'pymacs-exec "pymacs" nil t)
+(autoload 'pymacs-load "pymacs" nil t)
+(autoload 'pymacs-autoload "pymacs")
+(require 'pymacs)
+(pymacs-load "ropemacs" "rope-")
+(setq ropemacs-enable-autoimport t)
+
+;;(eval-after-load "pymacs"
+;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
