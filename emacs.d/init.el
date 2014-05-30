@@ -153,7 +153,7 @@ With argument, do this that many times."
 (add-to-list 'load-path "~/.emacs.d/switch-window-master")
 (require 'switch-window)
 
-(require 'chm-view)
+;; (require 'chm-view)
 
 ;; (setq browse-url-browser-function 'w3m-browse-url)
 ;;  (autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
@@ -175,20 +175,67 @@ With argument, do this that many times."
 (when window-system (set-exec-path-from-shell-PATH))
 
 
+
+;; (add-to-list 'load-path "/home/smed/Downloads/python-mode.el-6.1.3") 
+;; (setq py-install-directory "/home/smed/Downloads/python-mode.el-6.1.3")
+;; (require 'python-mode)
+
+
 ;; Python IDE
-(setenv "PYMACS_PYTHON" "python2")
-(add-to-list 'load-path "/home/smed/.emacs.d/python-mode.el-6.1.2")
-(setq py-install-directory "/home/smed/.emacs.d/python-mode.el-6.1.2")
+;; (setenv "PYMACS_PYTHON" "python2")
+(setq py-install-directory "/home/smed/Downloads/python-mode.el-6.1.3")
+(add-to-list 'load-path py-install-directory)
 (require 'python-mode)
-(autoload 'pymacs-apply "pymacs")
-(autoload 'pymacs-call "pymacs")
-(autoload 'pymacs-eval "pymacs" nil t)
-(autoload 'pymacs-exec "pymacs" nil t)
-(autoload 'pymacs-load "pymacs" nil t)
-(autoload 'pymacs-autoload "pymacs")
-(require 'pymacs)
-(pymacs-load "ropemacs" "rope-")
-(setq ropemacs-enable-autoimport t)
+;; (autoload 'pymacs-apply "pymacs")
+;; (autoload 'pymacs-call "pymacs")
+;; (autoload 'pymacs-eval "pymacs" nil t)
+;; (autoload 'pymacs-exec "pymacs" nil t)
+;; (autoload 'pymacs-load "pymacs" nil t)
+;; (autoload 'pymacs-autoload "pymacs")
+;; (require 'pymacs)
+;; (pymacs-load "ropemacs" "rope-")
+;; (setq ropemacs-enable-autoimport t)
+
+
+;; use IPython
+(setq-default py-shell-name "ipython")
+(setq-default py-which-bufname "IPython")
+; use the wx backend, for both mayavi and matplotlib
+(setq py-python-command-args
+  '("--gui=wx" "--pylab=wx" "-colors" "Linux"))
+(setq py-force-py-shell-name-p t)
+
+; switch to the interpreter after executing code
+;; (setq py-shell-switch-buffers-on-execute-p t)
+;; (setq py-switch-buffers-on-execute-p t)
+; don't split windows
+;; (setq py-split-windows-on-execute-p nil)
+; try to automagically figure out indentation
+(setq py-smart-indentation t)
+
+
+;; IPython
+;; (setq
+;;  python-shell-interpreter "ipython"
+;;  python-shell-interpreter-args ""
+;;  python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+;;  python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+;;  python-shell-completion-setup-code
+;;    "from IPython.core.completerlib import module_completion"
+;;  python-shell-completion-module-string-code
+;;    "';'.join(module_completion('''%s'''))\n"
+;;  python-shell-completion-string-code
+;;    "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
+
+
 
 ;;(eval-after-load "pymacs"
 ;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
+
+(set-frame-font "-xos4-terminus-medium-r-normal--14-140-*-*-*-*-*-*" nil t)
+
+(add-to-list 'load-path "~/.emacs.d/el-get/ein/lisp")
+(require 'ein)
+
+;; Remap disabled C-x C-u to undo
+(define-key global-map "\C-x\C-u" 'undo)
