@@ -27,3 +27,4 @@ exec i3
 # automount usb
 # udiskie -s &
 udiskie --tray &
+
