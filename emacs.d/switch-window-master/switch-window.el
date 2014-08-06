@@ -173,37 +173,9 @@ ask user for the window where move to"
     (progn
       (build-hash-table)
       (let ((index (prompt-for-selected-window "Move to window: ")))
-        (apply-to-window-index 'select-window index "Moved to %S"))
-      (reset-point endOfBuffer))))
-
-(defun build-hash-table ()
-  "Loop through all windows. If point is at last line, store
-   value of 1 in endOfBuffer hash-table."
-  (setq endOfBuffer (make-hash-table :test 'equal))
-  (setq thisWindow (selected-window))
-  (let ((c 1))
-    (dolist (win (switch-window-list))
-      (select-window win)
-;; Extract the last number from (count-lines-page) and check if 0
-      (if (eq 0 (string-to-number (substring (count-lines-page) (+ 1 (string-match "[ ][0-9]+[)]" (count-lines-page))) (+ -1 (match-end 0)))))
-  	  (puthash win 1 endOfBuffer)
-  	  (puthash win 0 endOfBuffer)
-  	(setq c (1+ c)))))
-  (select-window thisWindow))
-
-(defun reset-point (endOfBuffer)
-  "Loop through values of hash-table. If value is 1,
-   Move the point to the end of the buffer."
-  (setq thisWindow (selected-window))
-  (let ((c 1))
-    (dolist (win (switch-window-list))
-      (setq flag (gethash win endOfBuffer))
-      (if (eq 1 flag)
-	  (progn
-	  (select-window win)
-	  (goto-char (point-max))))
-      (setq c (1+ c))))
-  (select-window thisWindow))
+        (apply-to-window-index 'select-window index "Moved to %S"))))
+;;loop through each window and run to end of buffer if already at end of buffer
+)
 
 (defun prompt-for-selected-window (prompt-message)
   "Display an overlay in each window showing a unique key, then

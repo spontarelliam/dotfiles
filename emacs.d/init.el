@@ -4,10 +4,20 @@
 ;;
 (server-start)
 (add-to-list 'load-path "~/.emacs.d/")
-;(require 'color-theme)
 
-;; Load the 256 color hack for Emacs ver 21
-;(load "emacs21-256color-hack.el")
+
+;; Package manager for ver 24
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (package-initialize)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+  (add-to-list 'package-archives 
+               '("melpa" . "http://melpa.milkbox.net/packages/"))
+  (add-to-list 'package-archives
+               '("marmalade" . "http://marmalade-repo.org/packages/"))
+  (package-refresh-contents)
+  )
+
 
 ;; Solarized color theme
 (add-to-list 'load-path "~/.emacs.d/colors/emacs-color-theme-solarized")
@@ -32,20 +42,13 @@
  ;; If there is more than one, they won't work right.
  )
 
-;; (require 'i3)
-;; (require 'i3-integration)
-;; (i3-one-window-per-frame-mode-on)
-;; (i3-advise-visible-frame-list-on)
-
 ;; Save all backup files to /tmp
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-
-;;SERVER
-;; turn on font-lock mode
+;; turn on syntax highlighting for all buffers
 (when (fboundp 'global-font-lock-mode)
   (global-font-lock-mode t))
 
@@ -71,6 +74,9 @@
 
 ;; Associate Fortran mode with *.s files
 (setq auto-mode-alist (cons '("\\.s$" . fortran-mode) auto-mode-alist))
+
+;; Associate C-mode with *.ino files
+(setq auto-mode-alist (cons '("\\.ino$" . c-mode) auto-mode-alist))
 
 ;; Show column number
 (setq column-number-mode t)
@@ -108,10 +114,12 @@
 ;; Erc hide join messages
 (setq erc-hide-list '("JOIN" "PART" "QUIT"))
 
-;; Disable the toolbar and menubar
+;; Disable irrelevant stuff
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
+(tooltip-mode -1)
+(blink-cursor-mode -1)
 
 ;; Enable mouse zooming of images
 (global-set-key [C-mouse-4] 'text-scale-increase)
@@ -155,14 +163,15 @@ With argument, do this that many times."
 ;; Rebind your C-x o key:
 (global-set-key (kbd "M-o") 'switch-window)
 
-(require 'sunrise-commander)
+;;(require 'sunrise-commander)
 
 ;; This forces ediff to split windows vertically. Yes, the nomenclature
 ;; backwards.
 (setq ediff-split-window-function 'split-window-horizontally)
 
-;; (require 'org-indent-mode)
-;; (require 'visual-line-mode)
+;; Org-mode visual improvement
+(require 'org-indent-mode)
+(require 'visual-line-mode)
 
 (add-to-list 'load-path "~/Downloads/auctex-11.87")
 	(load "auctex.el" nil t t)
@@ -246,3 +255,138 @@ If the file is emacs lisp, run the byte compiled version if exist."
         (eshell-send-input) )
 (add-hook 'eshell-mode-hook
            '(lambda () (define-key eshell-mode-map "\C-\M-l" 'eshell-clear)))
+
+;; Set the shell path for Windows
+(defun set-exec-path-from-shell-PATH ()
+  (let ((path-from-shell (replace-regexp-in-string
+                          "[ \t\n]*$"
+                          ""
+                          (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
+    (setenv "PATH" path-from-shell)
+    (setq eshell-path-env path-from-shell) ; for eshell users
+    (setq exec-path (split-string path-from-shell path-separator))))
+
+(when window-system (set-exec-path-from-shell-PATH))
+
+
+;; Standard el-get setup
+;; (See also: https://github.com/dimitri/el-get#basic-setup)
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
+
+(el-get 'sync)
+
+
+;; Python
+;; Standard Jedi.el setting
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
+(add-hook 'python-mode-hook 'fci-mode)
+
+;; Python IDE
+;; (setenv "PYMACS_PYTHON" "python2")
+(setq py-install-directory "/home/smed/Downloads/python-mode.el-6.1.3")
+(add-to-list 'load-path py-install-directory)
+(require 'python-mode)
+
+;; use IPython
+(setq-default py-shell-name "ipython")
+(setq-default py-which-bufname "IPython")
+; use the wx backend, for both mayavi and matplotlib
+(setq py-python-command-args
+  '("--gui=wx" "--pylab=wx" "-colors" "Linux"))
+(setq py-force-py-shell-name-p t)
+
+; switch to the interpreter after executing code
+;; (setq py-shell-switch-buffers-on-execute-p t)
+;; (setq py-switch-buffers-on-execute-p t)
+; don't split windows
+;; (setq py-split-windows-on-execute-p nil)
+; try to automagically figure out indentation
+(setq py-smart-indentation t)
+
+
+
+(set-frame-font "-xos4-terminus-medium-r-normal--14-140-*-*-*-*-*-*" nil t)
+
+(add-to-list 'load-path "~/.emacs.d/el-get/ein/lisp")
+(require 'ein)
+
+;; Remap disabled C-x C-u to undo
+(define-key global-map "\C-x\C-u" 'undo)
+
+
+;; Smex is a M-x enhancement
+(require 'smex) ; Not needed if you use package.el
+(smex-initialize) ; Can be omitted. This might cause a (minimal) delay
+                  ; when Smex is auto-initialized on its first run.
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; This is your old M-x.
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+
+;; Suppress the startup message
+(setq inhibit-startup-screen t)
+
+;; UTF-8
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-language-environment "UTF-8")
+(prefer-coding-system 'utf-8)
+
+;; y or n instead of yes or no
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; set the fill-column to 80 characters and prevent tab characters
+(setq-default fill-column 80)
+(setq-default indent-tabs-mode nil)
+
+;; hide the mouse while typing
+(setq make-pointer-invisible t)
+
+;; require a newline at the end of files
+(setq require-final-newline t)
+
+;; highlight matching parentheses
+(show-paren-mode 1)
+
+;; Org mode
+;; syntax highlighting for code blocks
+(setq org-src-fontify-natively t)
+
+;; load babel supported languages
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+  '((python . t)
+     (emacs-lisp . t)))
+
+;; git
+;; (global-git-gutter-mode t)
+
+
+;; W3M web browser
+(setq browse-url-browser-function 'w3m-browse-url)
+(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
+ ;; optional keyboard short-cut
+(global-set-key "\C-xm" 'browse-url-at-point)
+
+;;cookies
+(setq w3m-use-cookies t)
+
+;; Undo
+(global-undo-tree-mode)
+
+
+;; C-x C-k: kill current buffer without asking
+(defun kill-this-buffer ()
+  (interactive)
+  (kill-buffer (current-buffer)))
+(global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+

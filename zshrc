@@ -1,3 +1,4 @@
+#!/bin/zsh
 #------------------------------
 # Comp stuff
 #------------------------------
@@ -18,14 +19,6 @@ SAVEHIST=1000
 #------------------------------
 export BROWSER="firefox"
 export EDITOR="emacsclient"
-#export PAGER="vimpager"
-#export PATH="${PATH}:${HOME}/bin:${HOME}/.cabal/bin"
-
-#-----------------------------
-# Dircolors
-#-----------------------------
-#LS_COLORS='rs=0:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:ex=01;32:';
-#export LS_COLORS
 
 #------------------------------
 # Prompt
@@ -47,6 +40,9 @@ if [ -d "$HOME/OpenFOAM/OpenFOAM-2.1.1/etc" ]; then
     source $HOME/OpenFOAM/OpenFOAM-2.1.1/etc/bashrc
 fi
 
+# Background
+feh --bg-scale /usr/share/archlinux/wallpaper/archlinux-simplyblack.png
+
 export GIT_AUTHOR_NAME="Adam S"
 export GIT_COMMITTER_NAME="Adam S"
 
@@ -56,10 +52,13 @@ export LD_LIBRARY_PATH
 # Fix Firefox font rendering by disabling PANGO
 export MOZ_DISABLE_PANGO=1
 
+alias fritzing='$HOME/Downloads/fritzing-0.8.0b.linux.AMD64/Fritzing'
+
 # Bind Keys
 bindkey "^[[7~" beginning-of-line
 bindkey "^[[8~" end-of-line
 bindkey "\e[3~" delete-char
+setxkbmap -option ctrl:nocaps  # Make Caps Lock a Control key
 
 # Enable numlock on startup. Effective after login.
 # causes error on some machines
@@ -86,12 +85,6 @@ if [[ $HOSTNAME = "spselc3a" ]]; then
    fi	
 fi
 
-export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
-source /opt/intel/bin/compilervars.sh intel64
-alias ifort='/opt/intel/bin/ifort'
-alias idbc='/opt/intel/bin/idbc'
-
-
 source /opt/OpenFOAM/OpenFOAM-2.2.2/etc/bashrc
 
 export PATH=$PATH:~/Downloads/git-annex.linux:/home/adam/Downloads/git-fat-master
@@ -99,3 +92,15 @@ export PATH=$PATH:~/Downloads/git-annex.linux:/home/adam/Downloads/git-fat-maste
 export GIT_HTTP_USER_AGENT="Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20100101 Firefox/17.0"
 # git config --global http.proxy $HTTP_PROXY
 
+if [ -d "/opt/intel" ]; then
+    export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
+    source /opt/intel/bin/compilervars.sh intel64
+    alias ifort='/opt/intel/bin/ifort'
+    alias idbc='/opt/intel/bin/idbc'
+fi
+
+# added by Anaconda 1.8.0 installer
+#export PATH="/opt/anaconda/bin:$PATH"
+
+# eval $(ssh-agent)
+# ssh-add
