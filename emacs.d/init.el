@@ -150,11 +150,99 @@ With argument, do this that many times."
 (global-unset-key (kbd "M-d"))
 (global-set-key (kbd "M-d") 'delete-word)
 
-(add-to-list 'load-path "~/.emacs.d/switch-window-master")
+(add-to-list 'load-path "~/Downloads/switch-window/switch-window-master")
 (require 'switch-window)
+;; Rebind your C-x o key:
+(global-set-key (kbd "M-o") 'switch-window)
 
 (require 'sunrise-commander)
 
 ;; This forces ediff to split windows vertically. Yes, the nomenclature
 ;; backwards.
 (setq ediff-split-window-function 'split-window-horizontally)
+
+;; (require 'org-indent-mode)
+;; (require 'visual-line-mode)
+
+(add-to-list 'load-path "~/Downloads/auctex-11.87")
+	(load "auctex.el" nil t t)
+	(load "preview-latex.el" nil t t)
+
+
+;; Restore frame layout after using ediff
+;; (defvar pre-ediff-window-configuration nil
+;;   "window configuration to use")
+;; (defvar new-ediff-frame-to-use nil
+;;   "new frame for ediff to use")
+;; (defun save-my-window-configuration ()
+;;   (interactive)
+;;   (setq pre-ediff-window-configuration (current-window-configuration))
+;;   (select-frame-set-input-focus (setq new-ediff-frame-to-use (new-frame))))
+;; (add-hook 'ediff-before-setup-hook 'save-my-window-configuration)
+;; (defun restore-my-window-configuration ()
+;;   (interactive)
+;;   (when (framep new-ediff-frame-to-use)
+;; (delete-frame new-ediff-frame-to-use)
+;; (setq new-ediff-frame-to-use nil))
+;;   (when (window-configuration-p pre-ediff-window-configuration
+;; (set-window-configuration pre-ediff-window-configuration)))
+;; (add-hook 'ediff-after-quit-hook-internal 'restore-my-window-configuration)
+
+
+(defun xah-run-current-file ()
+  "Execute the current file.
+For example, if the current buffer is the file xx.py,
+then it'll call “python xx.py” in a shell.
+The file can be php, perl, python, ruby, javascript, bash, ocaml, vb, elisp.
+File suffix is used to determine what program to run.
+
+If the file is modified, ask if you want to save first.
+
+If the file is emacs lisp, run the byte compiled version if exist."
+  (interactive)
+  (let* (
+         (suffixMap
+          `(
+            ("php" . "php")
+            ("pl" . "perl")
+            ("py" . "python")
+            ("py3" . ,(if (string-equal system-type "windows-nt") "c:/Python32/python.exe" "python3"))
+            ("rb" . "ruby")
+            ("js" . "node")             ; node.js
+            ("sh" . "bash")
+            ("ml" . "ocaml")
+            ("vbs" . "cscript")
+            )
+          )
+         (fName (buffer-file-name))
+         (fSuffix (file-name-extension fName))
+         (progName (cdr (assoc fSuffix suffixMap)))
+         (cmdStr (concat progName " \""   fName "\""))
+         )
+
+    (when (buffer-modified-p)
+      (when (y-or-n-p "Buffer modified. Do you want to save first?")
+	(save-buffer) ) )
+
+    (if (string-equal fSuffix "el") ; special case for emacs lisp
+        (load (file-name-sans-extension fName))
+      (if progName
+          (progn
+            (message "Running…")
+            (async-shell-command cmdStr "*xah-run-current-file output*" )
+            )
+        (message "No recognized program file suffix for this file.")
+        ) ) ))
+
+(global-set-key (kbd "<f8>") 'xah-run-current-file)
+
+(defun eshell-clear ()
+  "Clears the shell buffer ala Unix's clear or DOS' cls"
+  (interactive)
+  ;; the shell prompts are read-only, so clear that for the duration
+  (let ((inhibit-read-only t))
+ ;; simply delete the region
+ (delete-region (point-min) (point-max)))
+        (eshell-send-input) )
+(add-hook 'eshell-mode-hook
+           '(lambda () (define-key eshell-mode-map "\C-\M-l" 'eshell-clear)))

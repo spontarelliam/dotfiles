@@ -88,5 +88,14 @@ fi
 
 export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
 source /opt/intel/bin/compilervars.sh intel64
-alias ifort='/opt/intel/composer_xe_2013.5.192/bin/intel64/ifort'
-alias idbc='/opt/intel/composer_xe_2013.5.192/bin/intel64/idbc'
+alias ifort='/opt/intel/bin/ifort'
+alias idbc='/opt/intel/bin/idbc'
+
+
+source /opt/OpenFOAM/OpenFOAM-2.2.2/etc/bashrc
+
+export PATH=$PATH:~/Downloads/git-annex.linux:/home/adam/Downloads/git-fat-master
+
+export GIT_HTTP_USER_AGENT="Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20100101 Firefox/17.0"
+# git config --global http.proxy $HTTP_PROXY
+

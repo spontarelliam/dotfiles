@@ -19,4 +19,6 @@ numlockx &
 #/usr/bin/start-pulseaudio-x11
 
 #exec gnome-session-cinnamon
-exec i3
+#exec i3
+exec startxfce4
+
