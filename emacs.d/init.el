@@ -286,3 +286,8 @@ With argument, do this that many times."
 (global-undo-tree-mode)
 
 
+;; C-x C-k: kill current buffer without asking
+(defun kill-this-buffer ()
+  (interactive)
+  (kill-buffer (current-buffer)))
+(global-set-key (kbd "C-x C-k") 'kill-this-buffer)
