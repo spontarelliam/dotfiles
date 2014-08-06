@@ -93,16 +93,16 @@ if [[ $HOSTNAME = "spselc3a" ]]; then
    fi	
 fi
 
-<<<<<<< HEAD
+
 export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
 source /opt/intel/bin/compilervars.sh intel64
 alias ifort='/opt/intel/composer_xe_2013.5.192/bin/intel64/ifort'
 alias idbc='/opt/intel/composer_xe_2013.5.192/bin/intel64/idbc'
-=======
+
 # added by Anaconda 1.8.0 installer
 #export PATH="/opt/anaconda/bin:$PATH"
 
 # eval $(ssh-agent)
 # ssh-add
 
->>>>>>> usb
+
