@@ -1,8 +1,9 @@
 # Load Xresources file
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 
+# NOT WORKING ATM
 # Cyberpower UPS daemon
-/usr/sbin/pwrstatd
+#/usr/sbin/pwrstatd
 
 # Run conky
 #/home/smed/Downloads/conky/conky_start.sh
@@ -20,3 +21,10 @@ numlockx &
 
 #exec gnome-session-cinnamon
 exec i3
+#exec startxfce4
+#exec openbox-session
+
+# automount usb
+# udiskie -s &
+udiskie --tray &
+
