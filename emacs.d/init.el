@@ -18,6 +18,11 @@
   (package-refresh-contents)
   )
 
+;; install necessary packages
+;; (defvar install-packages (magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator))
+;; (dolist (pack install-packages)
+;;    (unless (package-installed-p pack)
+;;      (package-install pack)))
 
 ;; Solarized color theme
 (add-to-list 'load-path "~/.emacs.d/colors/emacs-color-theme-solarized")
@@ -52,9 +57,6 @@
 (when (fboundp 'global-font-lock-mode)
   (global-font-lock-mode t))
 
-;; enable visual feedback on selections
-;(setq transient-mark-mode t)
-
 ;; default to better frame titles
 (setq frame-title-format
       (concat  "%b - emacs@" (system-name)))
@@ -63,14 +65,14 @@
 (setq diff-switches "-u")
 
 ;; always end a file with a newline
-;(setq require-final-newline 'query)
+(setq require-final-newline 'query)
 
 ;; Enable colors
 (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
 ;; Enables text highlighting
-(transient-mark-mode 1)
+(setq transient-mark-mode t)
 
 ;; Associate Fortran mode with *.s files
 (setq auto-mode-alist (cons '("\\.s$" . fortran-mode) auto-mode-alist))
@@ -81,9 +83,6 @@
 ;; Show column number
 (setq column-number-mode t)
 
-;; Set mark region color to yellow
-;;(set-face-background 'region "yellow")
-
 ;; automatically save eshell history and stop annoying me
 (load "em-hist") ; So the history vars are defined
 (if (boundp 'eshell-save-history-on-exit)
@@ -93,7 +92,6 @@
     (setq eshell-ask-to-save-history 'always)) ; For older(?) version
 ;(message "eshell-ask-to-save-history is %s" eshell-ask-to-save-history)
 
-(add-to-list 'load-path "~/.emacs.d/magit-1.2.0")
 (require 'magit)
 
 ;; Flyspell
@@ -158,8 +156,9 @@ With argument, do this that many times."
 (global-unset-key (kbd "M-d"))
 (global-set-key (kbd "M-d") 'delete-word)
 
-(add-to-list 'load-path "~/.emacs.d/switch-window-master")
+;; visual window switching
 (require 'switch-window)
+(global-set-key (kbd "C-x o") 'switch-window)
 
 ;;(require 'sunrise-commander)
 
@@ -279,8 +278,7 @@ With argument, do this that many times."
      (emacs-lisp . t)))
 
 ;; git
-;; (global-git-gutter-mode t)
-
+(global-git-gutter-mode t)
 
 ;; W3M web browser
 (setq browse-url-browser-function 'w3m-browse-url)

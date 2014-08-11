@@ -106,3 +106,6 @@ fi
 # eval $(ssh-agent)
 # ssh-add
 
+# enable sysrq commands such as: Alt+SysRq+e
+#sysctl kernel.sysrq=1
+
