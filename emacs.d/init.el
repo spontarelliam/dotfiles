@@ -15,9 +15,15 @@
                '("melpa" . "http://melpa.milkbox.net/packages/"))
   (add-to-list 'package-archives
                '("marmalade" . "http://marmalade-repo.org/packages/"))
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
   (package-refresh-contents)
   )
 
+;; install necessary packages
+;; (defvar install-packages (magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8))
+;; (dolist (pack install-packages)
+;;    (unless (package-installed-p pack)
+;;      (package-install pack)))
 
 ;; Solarized color theme
 (add-to-list 'load-path "~/.emacs.d/colors/emacs-color-theme-solarized")
@@ -34,6 +40,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-drill-optimal-factor-matrix (quote ((1 (2.5 . 4.0) (1.7000000000000002 . 3.44) (2.36 . 3.86) (2.1799999999999997 . 3.72) (1.96 . 3.58) (2.6 . 4.14)))))
+ '(org-modules (quote (org-bbdb org-bibtex org-docview org-gnus org-info org-jsinfo org-irc org-mew org-mhe org-rmail org-vm org-wl org-w3m org-drill org-learn)))
  '(vc-follow-symlinks t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -52,9 +60,6 @@
 (when (fboundp 'global-font-lock-mode)
   (global-font-lock-mode t))
 
-;; enable visual feedback on selections
-;(setq transient-mark-mode t)
-
 ;; default to better frame titles
 (setq frame-title-format
       (concat  "%b - emacs@" (system-name)))
@@ -63,14 +68,14 @@
 (setq diff-switches "-u")
 
 ;; always end a file with a newline
-;(setq require-final-newline 'query)
+(setq require-final-newline 'query)
 
 ;; Enable colors
 (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
 ;; Enables text highlighting
-(transient-mark-mode 1)
+(setq transient-mark-mode t)
 
 ;; Associate Fortran mode with *.s files
 (setq auto-mode-alist (cons '("\\.s$" . fortran-mode) auto-mode-alist))
@@ -78,11 +83,13 @@
 ;; Associate C-mode with *.ino files
 (setq auto-mode-alist (cons '("\\.ino$" . c-mode) auto-mode-alist))
 
+;; ;; Associate R-mode with .r and .R files
+;; (auto-mode-alist (append (list '("\\.r$" . R-mode) 
+;;                                '("\\.R$" . R-mode))
+;;                                auto-mode-alist))
+
 ;; Show column number
 (setq column-number-mode t)
-
-;; Set mark region color to yellow
-;;(set-face-background 'region "yellow")
 
 ;; automatically save eshell history and stop annoying me
 (load "em-hist") ; So the history vars are defined
@@ -93,7 +100,6 @@
     (setq eshell-ask-to-save-history 'always)) ; For older(?) version
 ;(message "eshell-ask-to-save-history is %s" eshell-ask-to-save-history)
 
-(add-to-list 'load-path "~/.emacs.d/magit-1.2.0")
 (require 'magit)
 
 ;; Flyspell
@@ -158,103 +164,15 @@ With argument, do this that many times."
 (global-unset-key (kbd "M-d"))
 (global-set-key (kbd "M-d") 'delete-word)
 
-(add-to-list 'load-path "~/Downloads/switch-window/switch-window-master")
+;; visual window switching
 (require 'switch-window)
-;; Rebind your C-x o key:
-(global-set-key (kbd "M-o") 'switch-window)
+(global-set-key (kbd "C-x o") 'switch-window)
 
 ;;(require 'sunrise-commander)
 
 ;; This forces ediff to split windows vertically. Yes, the nomenclature
 ;; backwards.
 (setq ediff-split-window-function 'split-window-horizontally)
-
-;; Org-mode visual improvement
-(require 'org-indent-mode)
-(require 'visual-line-mode)
-
-(add-to-list 'load-path "~/Downloads/auctex-11.87")
-	(load "auctex.el" nil t t)
-	(load "preview-latex.el" nil t t)
-
-
-;; Restore frame layout after using ediff
-;; (defvar pre-ediff-window-configuration nil
-;;   "window configuration to use")
-;; (defvar new-ediff-frame-to-use nil
-;;   "new frame for ediff to use")
-;; (defun save-my-window-configuration ()
-;;   (interactive)
-;;   (setq pre-ediff-window-configuration (current-window-configuration))
-;;   (select-frame-set-input-focus (setq new-ediff-frame-to-use (new-frame))))
-;; (add-hook 'ediff-before-setup-hook 'save-my-window-configuration)
-;; (defun restore-my-window-configuration ()
-;;   (interactive)
-;;   (when (framep new-ediff-frame-to-use)
-;; (delete-frame new-ediff-frame-to-use)
-;; (setq new-ediff-frame-to-use nil))
-;;   (when (window-configuration-p pre-ediff-window-configuration
-;; (set-window-configuration pre-ediff-window-configuration)))
-;; (add-hook 'ediff-after-quit-hook-internal 'restore-my-window-configuration)
-
-
-(defun xah-run-current-file ()
-  "Execute the current file.
-For example, if the current buffer is the file xx.py,
-then it'll call “python xx.py” in a shell.
-The file can be php, perl, python, ruby, javascript, bash, ocaml, vb, elisp.
-File suffix is used to determine what program to run.
-
-If the file is modified, ask if you want to save first.
-
-If the file is emacs lisp, run the byte compiled version if exist."
-  (interactive)
-  (let* (
-         (suffixMap
-          `(
-            ("php" . "php")
-            ("pl" . "perl")
-            ("py" . "python")
-            ("py3" . ,(if (string-equal system-type "windows-nt") "c:/Python32/python.exe" "python3"))
-            ("rb" . "ruby")
-            ("js" . "node")             ; node.js
-            ("sh" . "bash")
-            ("ml" . "ocaml")
-            ("vbs" . "cscript")
-            )
-          )
-         (fName (buffer-file-name))
-         (fSuffix (file-name-extension fName))
-         (progName (cdr (assoc fSuffix suffixMap)))
-         (cmdStr (concat progName " \""   fName "\""))
-         )
-
-    (when (buffer-modified-p)
-      (when (y-or-n-p "Buffer modified. Do you want to save first?")
-	(save-buffer) ) )
-
-    (if (string-equal fSuffix "el") ; special case for emacs lisp
-        (load (file-name-sans-extension fName))
-      (if progName
-          (progn
-            (message "Running…")
-            (async-shell-command cmdStr "*xah-run-current-file output*" )
-            )
-        (message "No recognized program file suffix for this file.")
-        ) ) ))
-
-(global-set-key (kbd "<f8>") 'xah-run-current-file)
-
-(defun eshell-clear ()
-  "Clears the shell buffer ala Unix's clear or DOS' cls"
-  (interactive)
-  ;; the shell prompts are read-only, so clear that for the duration
-  (let ((inhibit-read-only t))
- ;; simply delete the region
- (delete-region (point-min) (point-max)))
-        (eshell-send-input) )
-(add-hook 'eshell-mode-hook
-           '(lambda () (define-key eshell-mode-map "\C-\M-l" 'eshell-clear)))
 
 ;; Set the shell path for Windows
 (defun set-exec-path-from-shell-PATH ()
@@ -285,8 +203,8 @@ If the file is emacs lisp, run the byte compiled version if exist."
 
 ;; Python
 ;; Standard Jedi.el setting
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+;(add-hook 'python-mode-hook 'jedi:setup)
+;(setq jedi:complete-on-dot t)
 
 (add-hook 'python-mode-hook 'fci-mode)
 
@@ -313,8 +231,7 @@ If the file is emacs lisp, run the byte compiled version if exist."
 (setq py-smart-indentation t)
 
 
-
-(set-frame-font "-xos4-terminus-medium-r-normal--14-140-*-*-*-*-*-*" nil t)
+;(set-frame-font "-xos4-terminus-medium-r-normal--14-140-*-*-*-*-*-*" nil t)
 
 (add-to-list 'load-path "~/.emacs.d/el-get/ein/lisp")
 (require 'ein)
@@ -360,6 +277,10 @@ If the file is emacs lisp, run the byte compiled version if exist."
 ;; Org mode
 ;; syntax highlighting for code blocks
 (setq org-src-fontify-natively t)
+(setq visual-line-mode t)
+(global-visual-line-mode 1)
+;; (setq org-indent-mode t)
+(setq org-startup-indented t)
 
 ;; load babel supported languages
 (org-babel-do-load-languages
@@ -368,8 +289,7 @@ If the file is emacs lisp, run the byte compiled version if exist."
      (emacs-lisp . t)))
 
 ;; git
-;; (global-git-gutter-mode t)
-
+(global-git-gutter-mode t)
 
 ;; W3M web browser
 (setq browse-url-browser-function 'w3m-browse-url)
@@ -390,3 +310,36 @@ If the file is emacs lisp, run the byte compiled version if exist."
   (kill-buffer (current-buffer)))
 (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
 
+(require 'org-drill)
+
+;; Use squid proxy
+(setq url-proxy-services '(("http" . "10.2.129.209:3128")))
+
+;; Run autopep8 when saving .py files
+(require 'py-autopep8)
+(add-hook 'before-save-hook 'py-autopep8-before-save)
+(setq py-autopep8-options '("--max-line-length=80"))
+
+;; image viewer
+;; (require 'eiv)
+
+;; clocktable format avoid converting 24 hr to day
+(setq org-time-clocksum-format (quote (:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)))
+(setq org-log-into-drawer 3)
+;; Increase the size of latex equation rendering
+(setq org-format-latex-options '(:foreground default :background default :scale 1.4 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
+              ("begin" "$1" "$" "$$" "\\(" "\\[")))
+
+;; Doc-view
+;; Navigate pages with M-[ or M-] without being in the doc-view buffer.
+(fset 'doc-prev "\C-xo\C-x[\C-xo")
+(fset 'doc-next "\C-xo\C-x]\C-xo")
+(global-set-key (kbd "M-[") 'doc-prev)
+(global-set-key (kbd "M-]") 'doc-next)
+(setq org-return-follows-link t)
+
+;; If switch to buffer that's already open in another frame,
+;; don't switch to that window, just open it again in current window
+(setq switch-to-buffer-preserve-window-point 'already-displayed)
+
+(setq doc-view-continuous t)
