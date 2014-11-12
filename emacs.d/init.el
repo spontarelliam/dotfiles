@@ -3,8 +3,6 @@
 ;; -------------------------------
 ;;
 (server-start)
-(add-to-list 'load-path "~/.emacs.d/")
-
 
 ;; Package manager for ver 24
 (when (>= emacs-major-version 24)
@@ -15,11 +13,12 @@
                '("melpa" . "http://melpa.milkbox.net/packages/"))
   (add-to-list 'package-archives
                '("marmalade" . "http://marmalade-repo.org/packages/"))
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
   (package-refresh-contents)
   )
 
 ;; install necessary packages
-;; (defvar install-packages (magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator))
+;; (defvar install-packages (magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8))
 ;; (dolist (pack install-packages)
 ;;    (unless (package-installed-p pack)
 ;;      (package-install pack)))
@@ -39,6 +38,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-drill-optimal-factor-matrix (quote ((1 (2.5 . 4.0) (1.7000000000000002 . 3.44) (2.36 . 3.86) (2.1799999999999997 . 3.72) (1.96 . 3.58) (2.6 . 4.14)))))
+ '(org-modules (quote (org-bbdb org-bibtex org-docview org-gnus org-info org-jsinfo org-irc org-mew org-mhe org-rmail org-vm org-wl org-w3m org-drill org-learn)))
  '(vc-follow-symlinks t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -103,6 +104,7 @@
 (add-hook 'tex-mode-hook 'flyspell-mode)
 
 ;; Erc Nick Colors (version 24)
+(add-to-list 'load-path "~/.emacs.d/erc-hl-nicks")
 (if (>= (string-to-number emacs-version) 24)                        ; this is the test, the "if"
     (require 'erc-hl-nicks)
   (ding)                                              ; From here on is the "else"
@@ -201,7 +203,6 @@ With argument, do this that many times."
 (add-hook 'python-mode-hook 'fci-mode)
 
 ;; Python IDE
-;; (setenv "PYMACS_PYTHON" "python2")
 (setq py-install-directory "/home/smed/Downloads/python-mode.el-6.1.3")
 (add-to-list 'load-path py-install-directory)
 (require 'python-mode)
@@ -270,6 +271,8 @@ With argument, do this that many times."
 ;; Org mode
 ;; syntax highlighting for code blocks
 (setq org-src-fontify-natively t)
+(setq auto-indent-start-org-indent t)
+(setq org-visual-line-mode t)
 
 ;; load babel supported languages
 (org-babel-do-load-languages
@@ -280,21 +283,20 @@ With argument, do this that many times."
 ;; git
 (global-git-gutter-mode t)
 
-;; W3M web browser
-(setq browse-url-browser-function 'w3m-browse-url)
-(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
- ;; optional keyboard short-cut
-(global-set-key "\C-xm" 'browse-url-at-point)
-
-;;cookies
-(setq w3m-use-cookies t)
-
 ;; Undo
 (global-undo-tree-mode)
-
 
 ;; C-x C-k: kill current buffer without asking
 (defun kill-this-buffer ()
   (interactive)
   (kill-buffer (current-buffer)))
 (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+
+(require 'org-drill)
+
+;; press F8 on keypad to lookup dictionary definition
+(global-set-key (kbd "<f8>") 'dictionary-lookup-definition)
+
+(require 'py-autopep8)
+(add-hook 'before-save-hook 'py-autopep8-before-save)
+
