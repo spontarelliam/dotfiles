@@ -46,7 +46,7 @@ feh --bg-scale /usr/share/archlinux/wallpaper/archlinux-simplyblack.png
 export GIT_AUTHOR_NAME="Adam S"
 export GIT_COMMITTER_NAME="Adam S"
 
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/smed/Downloads/freesteam-2.0
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/smed/Downloads/freesteam-2.0:/usr/local/lib
 export LD_LIBRARY_PATH
 
 # Fix Firefox font rendering by disabling PANGO
@@ -104,4 +104,10 @@ fi
 
 # eval $(ssh-agent)
 # ssh-add
+
+# Set okular as default pdf viewer
 xdg-mime default okularApplication_pdf.desktop application/pdf 
+
+# enable sysrq commands such as: Alt+SysRq+e
+#sysctl kernel.sysrq=1
+
