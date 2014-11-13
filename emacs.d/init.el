@@ -286,11 +286,11 @@ With argument, do this that many times."
 ;; Undo
 (global-undo-tree-mode)
 
-;; C-x C-k: kill current buffer without asking
+;; C-x k: kill current buffer without asking
 (defun kill-this-buffer ()
   (interactive)
   (kill-buffer (current-buffer)))
-(global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
 
 (require 'org-drill)
 
