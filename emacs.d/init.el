@@ -24,6 +24,7 @@
 ;;      (package-install pack)))
 
 ;; Solarized color theme
+(add-to-list 'load-path "~/.emacs.d/")
 (add-to-list 'load-path "~/.emacs.d/colors/emacs-color-theme-solarized")
 (require 'color-theme-solarized)
   (eval-after-load "color-theme-solarized"
@@ -109,11 +110,11 @@
 (add-hook 'tex-mode-hook 'flyspell-mode)
 
 ;; Erc Nick Colors (version 24)
-(add-to-list 'load-path "~/.emacs.d/erc-hl-nicks")
-(if (>= (string-to-number emacs-version) 24)                        ; this is the test, the "if"
-    (require 'erc-hl-nicks)
-  (ding)                                              ; From here on is the "else"
-    (message "Time to upgrade, don't you think?"))
+;; (add-to-list 'load-path "~/.emacs.d/erc-hl-nicks")
+;; (if (>= (string-to-number emacs-version) 24)                        ; this is the test, the "if"
+;;     (require 'erc-hl-nicks)
+;;   (ding)                                              ; From here on is the "else"
+;;     (message "Time to upgrade, don't you think?"))
 
 
 ;; Erc hide join messages
@@ -275,8 +276,8 @@ With argument, do this that many times."
 ;; Org mode
 ;; syntax highlighting for code blocks
 (setq org-src-fontify-natively t)
-(setq auto-indent-start-org-indent t)
-(setq org-visual-line-mode t)
+(setq org-startup-indented t)
+(global-visual-line-mode 1)
 
 ;; load babel supported languages
 (org-babel-do-load-languages
@@ -333,5 +334,56 @@ With argument, do this that many times."
 ;; press F8 on keypad to lookup dictionary definition
 (global-set-key (kbd "<f8>") 'dictionary-lookup-definition)
 
+;; org-mode capture
+(setq org-default-notes-file (concat org-directory "/notes.org"))
+     (define-key global-map "\C-cc" 'org-capture)
 
 
+;; ;; Org-mode allow relative file refiling
+;; ;; any headline with level <= 2 is a target
+;; (setq org-refile-targets '((nil :maxlevel . 2)
+;;                                 ; all top-level headlines in the
+;;                                 ; current buffer are used (first) as a
+;;                                 ; refile target
+;;                            (org-agenda-files :maxlevel . 2)))
+
+;; ;; provide refile targets as paths, including the file name
+;; ;; (without directory) as level 1 of the path
+;; (setq org-refile-use-outline-path 'file)
+
+;; ;; allow to create new nodes (must be confirmed by the user) as
+;; ;; refile targets
+;; (setq org-refile-allow-creating-parent-nodes 'confirm)
+
+;; ;; refile only within the current buffer
+;; (defun my/org-refile-within-current-buffer ()
+;;   "Move the entry at point to another heading in the current buffer."
+;;   (interactive)
+;;   (let ((org-refile-targets '((nil :maxlevel . 5))))
+;;     (org-refile)))
+
+
+;; Org-mode clocking mods
+(eval-after-load 'org
+  '(progn
+     (defun wicked/org-clock-in-if-starting ()
+       "Clock in when the task is marked STARTED."
+       (when (and (string= state "STARTED")
+		  (not (string= last-state state)))
+	 (org-clock-in)))
+     (add-hook 'org-after-todo-state-change-hook
+	       'wicked/org-clock-in-if-starting)
+     (defadvice org-clock-in (after wicked activate)
+      "Set this task's status to 'STARTED'."
+      (org-todo "STARTED"))
+    (defun wicked/org-clock-out-if-waiting ()
+      "Clock out when the task is marked WAITING."
+      (when (and (string= state "WAITING")
+                 (equal (marker-buffer org-clock-marker) (current-buffer))
+                 (< (point) org-clock-marker)
+	         (> (save-excursion (outline-next-heading) (point))
+		    org-clock-marker)
+		 (not (string= last-state state)))
+	(org-clock-out)))
+    (add-hook 'org-after-todo-state-change-hook
+	      'wicked/org-clock-out-if-waiting)))
