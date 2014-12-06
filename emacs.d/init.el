@@ -18,10 +18,10 @@
   )
 
 ;; install necessary packages
-;; (defvar install-packages (magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8))
-;; (dolist (pack install-packages)
-;;    (unless (package-installed-p pack)
-;;      (package-install pack)))
+(defvar install-packages '(magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8))
+(dolist (pack install-packages)
+  (unless (package-installed-p pack)
+     (package-install pack)))
 
 ;; Solarized color theme
 (add-to-list 'load-path "~/.emacs.d/")
