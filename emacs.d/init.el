@@ -18,10 +18,10 @@
   )
 
 ;; install necessary packages
-;; (defvar install-packages (magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8))
-;; (dolist (pack install-packages)
-;;    (unless (package-installed-p pack)
-;;      (package-install pack)))
+(defvar install-packages '(magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8 aggressive-indent))
+(dolist (pack install-packages)
+  (unless (package-installed-p pack)
+    (package-install pack)))
 
 ;; Solarized color theme
 (add-to-list 'load-path "~/.emacs.d/colors/emacs-color-theme-solarized")
@@ -81,6 +81,11 @@
 ;; Associate C-mode with *.ino files
 (setq auto-mode-alist (cons '("\\.ino$" . c-mode) auto-mode-alist))
 
+;; ;; Associate R-mode with .r and .R files
+;; (auto-mode-alist (append (list '("\\.r$" . R-mode) 
+;;                                '("\\.R$" . R-mode))
+;;                                auto-mode-alist))
+
 ;; Show column number
 (setq column-number-mode t)
 
@@ -104,11 +109,11 @@
 (add-hook 'tex-mode-hook 'flyspell-mode)
 
 ;; Erc Nick Colors (version 24)
-(add-to-list 'load-path "~/.emacs.d/erc-hl-nicks")
-(if (>= (string-to-number emacs-version) 24)                        ; this is the test, the "if"
-    (require 'erc-hl-nicks)
-  (ding)                                              ; From here on is the "else"
-    (message "Time to upgrade, don't you think?"))
+;; (add-to-list 'load-path "~/.emacs.d/erc-hl-nicks")
+;; (if (>= (string-to-number emacs-version) 24)                        ; this is the test, the "if"
+;;     (require 'erc-hl-nicks)
+;;   (ding)                                              ; From here on is the "else"
+;;     (message "Time to upgrade, don't you think?"))
 
 
 ;; Erc hide join messages
@@ -224,7 +229,6 @@ With argument, do this that many times."
 (setq py-smart-indentation t)
 
 
-
 (set-frame-font "-xos4-terminus-medium-r-normal--14-140-*-*-*-*-*-*" nil t)
 
 (add-to-list 'load-path "~/.emacs.d/el-get/ein/lisp")
@@ -271,10 +275,11 @@ With argument, do this that many times."
 ;; Org mode
 ;; syntax highlighting for code blocks
 (setq org-src-fontify-natively t)
-(setq auto-indent-start-org-indent t)
-(setq org-visual-line-mode t)
-(setq org-default-notes-file (concat org-directory "/notes.org"))
+(setq org-startup-indented t)
+(global-visual-line-mode 1)
+;; (setq org-default-notes-file (concat org-directory "/notes.org"))
 (define-key global-map "\C-cc" 'org-capture)
+
 
 ;; load babel supported languages
 (org-babel-do-load-languages
@@ -296,9 +301,90 @@ With argument, do this that many times."
 
 (require 'org-drill)
 
+;; Use squid proxy
+;(setq url-proxy-services '(("http" . "10.2.129.209:3128")))
+
+;; Run autopep8 when saving .py files
+(require 'py-autopep8)
+(add-hook 'before-save-hook 'py-autopep8-before-save)
+(setq py-autopep8-options '("--max-line-length=80"))
+
+;; image viewer
+;; (require 'eiv)
+
+;; clocktable format avoid converting 24 hr to day
+(setq org-time-clocksum-format (quote (:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)))
+(setq org-log-into-drawer 3)
+;; Increase the size of latex equation rendering
+(setq org-format-latex-options '(:foreground default :background default :scale 1.4 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
+              ("begin" "$1" "$" "$$" "\\(" "\\[")))
+
+;; Doc-view
+;; Navigate pages with M-[ or M-] without being in the doc-view buffer.
+(fset 'doc-prev "\C-xo\C-x[\C-xo")
+(fset 'doc-next "\C-xo\C-x]\C-xo")
+(global-set-key (kbd "M-[") 'doc-prev)
+(global-set-key (kbd "M-]") 'doc-next)
+(setq org-return-follows-link t)
+
+;; If switch to buffer that's already open in another frame,
+;; don't switch to that window, just open it again in current window
+(setq switch-to-buffer-preserve-window-point 'already-displayed)
+
+(setq doc-view-continuous t)
+
 ;; press F8 on keypad to lookup dictionary definition
 (global-set-key (kbd "<f8>") 'dictionary-lookup-definition)
 
-(require 'py-autopep8)
-(add-hook 'before-save-hook 'py-autopep8-before-save)
+;; ;; Org-mode allow relative file refiling
+;; ;; any headline with level <= 2 is a target
+;; (setq org-refile-targets '((nil :maxlevel . 2)
+;;                                 ; all top-level headlines in the
+;;                                 ; current buffer are used (first) as a
+;;                                 ; refile target
+;;                            (org-agenda-files :maxlevel . 2)))
 
+;; ;; provide refile targets as paths, including the file name
+;; ;; (without directory) as level 1 of the path
+;; (setq org-refile-use-outline-path 'file)
+
+;; ;; allow to create new nodes (must be confirmed by the user) as
+;; ;; refile targets
+;; (setq org-refile-allow-creating-parent-nodes 'confirm)
+
+;; ;; refile only within the current buffer
+;; (defun my/org-refile-within-current-buffer ()
+;;   "Move the entry at point to another heading in the current buffer."
+;;   (interactive)
+;;   (let ((org-refile-targets '((nil :maxlevel . 5))))
+;;     (org-refile)))
+
+
+;; Org-mode clocking mods
+(eval-after-load 'org
+  '(progn
+     (defun wicked/org-clock-in-if-starting ()
+       "Clock in when the task is marked STARTED."
+       (when (and (string= state "STARTED")
+		  (not (string= last-state state)))
+	 (org-clock-in)))
+     (add-hook 'org-after-todo-state-change-hook
+	       'wicked/org-clock-in-if-starting)
+     (defadvice org-clock-in (after wicked activate)
+      "Set this task's status to 'STARTED'."
+      (org-todo "STARTED"))
+    (defun wicked/org-clock-out-if-waiting ()
+      "Clock out when the task is marked WAITING."
+      (when (and (string= state "WAITING")
+                 (equal (marker-buffer org-clock-marker) (current-buffer))
+                 (< (point) org-clock-marker)
+	         (> (save-excursion (outline-next-heading) (point))
+		    org-clock-marker)
+		 (not (string= last-state state)))
+	(org-clock-out)))
+    (add-hook 'org-after-todo-state-change-hook
+	      'wicked/org-clock-out-if-waiting)))
+
+;; Enable agressive-indent in python and lisp modes
+(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+(add-hook 'python-mode-hook #'aggressive-indent-mode)

@@ -19,14 +19,6 @@ SAVEHIST=1000
 #------------------------------
 export BROWSER="firefox"
 export EDITOR="emacsclient"
-#export PAGER="vimpager"
-#export PATH="${PATH}:${HOME}/bin:${HOME}/.cabal/bin"
-
-#-----------------------------
-# Dircolors
-#-----------------------------
-#LS_COLORS='rs=0:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:ex=01;32:';
-#export LS_COLORS
 
 #------------------------------
 # Prompt
@@ -93,11 +85,18 @@ if [[ $HOSTNAME = "spselc3a" ]]; then
    fi	
 fi
 
+#source /opt/OpenFOAM/OpenFOAM-2.2.2/etc/bashrc
+
+export PATH=$PATH:~/Downloads/git-annex.linux:/home/adam/Downloads/git-fat-master
+
+export GIT_HTTP_USER_AGENT="Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20100101 Firefox/17.0"
+# git config --global http.proxy $HTTP_PROXY
+
 if [ -d "/opt/intel" ]; then
     export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
     source /opt/intel/bin/compilervars.sh intel64
-    alias ifort='/opt/intel/composer_xe_2013.5.192/bin/intel64/ifort'
-    alias idbc='/opt/intel/composer_xe_2013.5.192/bin/intel64/idbc'
+    alias ifort='/opt/intel/bin/ifort'
+    alias idbc='/opt/intel/bin/idbc'
 fi
 
 # added by Anaconda 1.8.0 installer
@@ -105,6 +104,9 @@ fi
 
 # eval $(ssh-agent)
 # ssh-add
+
+# Set okular as default pdf viewer
+xdg-mime default okularApplication_pdf.desktop application/pdf 
 
 # enable sysrq commands such as: Alt+SysRq+e
 #sysctl kernel.sysrq=1
