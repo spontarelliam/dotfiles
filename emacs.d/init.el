@@ -273,6 +273,8 @@ With argument, do this that many times."
 (setq org-src-fontify-natively t)
 (setq auto-indent-start-org-indent t)
 (setq org-visual-line-mode t)
+(setq org-default-notes-file (concat org-directory "/notes.org"))
+(define-key global-map "\C-cc" 'org-capture)
 
 ;; load babel supported languages
 (org-babel-do-load-languages
