@@ -5,11 +5,6 @@
 # Cyberpower UPS daemon
 #/usr/sbin/pwrstatd
 
-# Run conky
-#/home/smed/Downloads/conky/conky_start.sh
-
-#modprobe vboxdrv
-
 #xset +fp /usr/share/fonts/local
 #xset fp rehash
 
@@ -19,10 +14,14 @@ numlockx &
 # Exec pulseaudio 
 #/usr/bin/start-pulseaudio-x11
 
+# run xrandr script
+bash ~/.i3/detect_displays.sh
+
 exec i3
 #exec startxfce4
 
 # automount usb
 # udiskie -s &
 udiskie --tray &
+
 

@@ -18,13 +18,12 @@
   )
 
 ;; install necessary packages
-;; (defvar install-packages (magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8))
-;; (dolist (pack install-packages)
-;;    (unless (package-installed-p pack)
-;;      (package-install pack)))
+(defvar install-packages '(magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8))
+(dolist (pack install-packages)
+  (unless (package-installed-p pack)
+    (package-install pack)))
 
 ;; Solarized color theme
-(add-to-list 'load-path "~/.emacs.d/")
 (add-to-list 'load-path "~/.emacs.d/colors/emacs-color-theme-solarized")
 (require 'color-theme-solarized)
   (eval-after-load "color-theme-solarized"
@@ -203,8 +202,8 @@ With argument, do this that many times."
 
 ;; Python
 ;; Standard Jedi.el setting
-;(add-hook 'python-mode-hook 'jedi:setup)
-;(setq jedi:complete-on-dot t)
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
 
 (add-hook 'python-mode-hook 'fci-mode)
 
@@ -230,7 +229,7 @@ With argument, do this that many times."
 (setq py-smart-indentation t)
 
 
-;(set-frame-font "-xos4-terminus-medium-r-normal--14-140-*-*-*-*-*-*" nil t)
+(set-frame-font "-xos4-terminus-medium-r-normal--14-140-*-*-*-*-*-*" nil t)
 
 (add-to-list 'load-path "~/.emacs.d/el-get/ein/lisp")
 (require 'ein)
@@ -278,6 +277,9 @@ With argument, do this that many times."
 (setq org-src-fontify-natively t)
 (setq org-startup-indented t)
 (global-visual-line-mode 1)
+;; (setq org-default-notes-file (concat org-directory "/notes.org"))
+(define-key global-map "\C-cc" 'org-capture)
+
 
 ;; load babel supported languages
 (org-babel-do-load-languages
@@ -300,7 +302,7 @@ With argument, do this that many times."
 (require 'org-drill)
 
 ;; Use squid proxy
-(setq url-proxy-services '(("http" . "10.2.129.209:3128")))
+;(setq url-proxy-services '(("http" . "10.2.129.209:3128")))
 
 ;; Run autopep8 when saving .py files
 (require 'py-autopep8)
@@ -334,11 +336,6 @@ With argument, do this that many times."
 ;; press F8 on keypad to lookup dictionary definition
 (global-set-key (kbd "<f8>") 'dictionary-lookup-definition)
 
-;; org-mode capture
-(setq org-default-notes-file (concat org-directory "/notes.org"))
-     (define-key global-map "\C-cc" 'org-capture)
-
-
 ;; ;; Org-mode allow relative file refiling
 ;; ;; any headline with level <= 2 is a target
 ;; (setq org-refile-targets '((nil :maxlevel . 2)
@@ -367,3 +364,4 @@ With argument, do this that many times."
      (org-clock-out nil t)
      (org-save-all-org-buffers))
 (add-hook 'kill-emacs-hook 'org-clock-out-maybe)
+
