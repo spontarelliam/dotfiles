@@ -20,7 +20,7 @@
   )
 
 ;; install necessary packages
-(defvar install-packages '(adamzsdf magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8 auctex expand-region flycheck discover-my-major))
+(defvar install-packages '(magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8 auctex expand-region flycheck discover-my-major))
 (setq install-packages '(magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8 auctex expand-region flycheck discover-my-major))
 (dolist (pack install-packages)
   (unless (package-installed-p pack)
@@ -384,31 +384,11 @@ With argument, do this that many times."
 ;;   (let ((org-refile-targets '((nil :maxlevel . 5))))
 ;;     (org-refile)))
 
-
-;; Org-mode clocking mods
-(eval-after-load 'org
-  '(progn
-     (defun wicked/org-clock-in-if-starting ()
-       "Clock in when the task is marked STARTED."
-       (when (and (string= state "STARTED")
-		  (not (string= last-state state)))
-	 (org-clock-in)))
-     (add-hook 'org-after-todo-state-change-hook
-	       'wicked/org-clock-in-if-starting)
-     (defadvice org-clock-in (after wicked activate)
-      "Set this task's status to 'STARTED'."
-      (org-todo "STARTED"))
-    (defun wicked/org-clock-out-if-waiting ()
-      "Clock out when the task is marked WAITING."
-      (when (and (string= state "WAITING")
-                 (equal (marker-buffer org-clock-marker) (current-buffer))
-                 (< (point) org-clock-marker)
-	         (> (save-excursion (outline-next-heading) (point))
-		    org-clock-marker)
-		 (not (string= last-state state)))
-	(org-clock-out)))
-    (add-hook 'org-after-todo-state-change-hook
-	      'wicked/org-clock-out-if-waiting)))
+;; Stop a currently running clock on killing emacs
+(defun org-clock-out-maybe ()
+     (org-clock-out nil t)
+     (org-save-all-org-buffers))
+(add-hook 'kill-emacs-hook 'org-clock-out-maybe)
 
 ;; Enable agressive-indent in python and lisp modes
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
