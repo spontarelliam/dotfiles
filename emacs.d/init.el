@@ -4,24 +4,29 @@
 ;;
 (server-start)
 
-;; Package manager for ver 24
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (package-initialize)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-  (add-to-list 'package-archives 
-               '("melpa" . "http://melpa.milkbox.net/packages/"))
-  (add-to-list 'package-archives
-               '("marmalade" . "http://marmalade-repo.org/packages/"))
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-  (package-refresh-contents)
+(require 'package)
+(package-initialize)
+(defun refresh-packages ()
+  "Refresh packages for ver 24"
+  (when (>= emacs-major-version 24)
+    (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+    (add-to-list 'package-archives 
+                 '("melpa" . "http://melpa.milkbox.net/packages/"))
+    (add-to-list 'package-archives
+                 '("marmalade" . "http://marmalade-repo.org/packages/"))
+    (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+    (package-refresh-contents)
+    )
   )
 
 ;; install necessary packages
-(defvar install-packages '(magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8 aggressive-indent))
+(defvar install-packages '(adamzsdf magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8 auctex expand-region flycheck discover-my-major))
+(setq install-packages '(magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8 auctex expand-region flycheck discover-my-major))
 (dolist (pack install-packages)
   (unless (package-installed-p pack)
-    (package-install pack)))
+    (progn (refresh-packages) (package-install pack))
+    ))
+
 
 ;; Solarized color theme
 (add-to-list 'load-path "~/.emacs.d/colors/emacs-color-theme-solarized")
@@ -38,8 +43,19 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-drill-optimal-factor-matrix (quote ((1 (2.5 . 4.0) (1.7000000000000002 . 3.44) (2.36 . 3.86) (2.1799999999999997 . 3.72) (1.96 . 3.58) (2.6 . 4.14)))))
- '(org-modules (quote (org-bbdb org-bibtex org-docview org-gnus org-info org-jsinfo org-irc org-mew org-mhe org-rmail org-vm org-wl org-w3m org-drill org-learn)))
+ '(org-agenda-files (quote ("~/org/notes.org")))
+ '(org-drill-optimal-factor-matrix
+   (quote
+    ((1
+      (2.5 . 4.0)
+      (1.7000000000000002 . 3.44)
+      (2.36 . 3.86)
+      (2.1799999999999997 . 3.72)
+      (1.96 . 3.58)
+      (2.6 . 4.14)))))
+ '(org-modules
+   (quote
+    (org-bbdb org-bibtex org-docview org-gnus org-info org-jsinfo org-irc org-mew org-mhe org-rmail org-vm org-wl org-w3m org-drill org-learn)))
  '(vc-follow-symlinks t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -99,6 +115,15 @@
 ;(message "eshell-ask-to-save-history is %s" eshell-ask-to-save-history)
 
 (require 'magit)
+(global-unset-key (kbd "C-x g"))
+(global-set-key (kbd "C-x g h") 'magit-log)
+(global-set-key (kbd "C-x g f") 'magit-file-log)
+(global-set-key (kbd "C-x g b") 'magit-blame-mode)
+(global-set-key (kbd "C-x g m") 'magit-branch-manager)
+(global-set-key (kbd "C-x g c") 'magit-branch)
+(global-set-key (kbd "C-x g s") 'magit-status)
+(global-set-key (kbd "C-x g r") 'magit-reflog)
+(global-set-key (kbd "C-x g t") 'magit-tag)
 
 ;; Flyspell
 (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
@@ -121,7 +146,7 @@
 
 ;; Disable irrelevant stuff
 (tool-bar-mode -1)
-(menu-bar-mode -1)
+;; (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (tooltip-mode -1)
 (blink-cursor-mode -1)
@@ -387,4 +412,30 @@ With argument, do this that many times."
 
 ;; Enable agressive-indent in python and lisp modes
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-(add-hook 'python-mode-hook #'aggressive-indent-mode)
+;; (add-hook 'python-mode-hook #'aggressive-indent-mode) ;; conflicts with autopep8
+
+;; (add-to-list 'load-path "~/.emacs.d/elpa/auctex-11.88")
+;; (load "auctex.el" nil t t)
+;; (load "preview.el" nil t t)
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+(setq-default TeX-master nil)
+
+;; select text objects incrementally
+(require 'expand-region)
+(global-set-key (kbd "M-m") 'er/expand-region)
+
+;; language syntax checking
+(require 'flycheck)
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; A quick major mode help with discover-my-major
+(global-unset-key (kbd "C-h h"))        ; original "C-h h" displays "hello world" in different languages
+(define-key 'help-command (kbd "h m") 'discover-my-major)
+
+(setq org-directory "~/org")
+(setq org-agenda-files '("~/org/notes.org"))
+(setq org-mobile-files '("~/org"))
+(setq org-mobile-directory "~/Dropbox/MobileOrg")
+
+
