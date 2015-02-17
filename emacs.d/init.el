@@ -18,23 +18,86 @@
     (package-refresh-contents)
     )
   )
-
-;; install necessary packages
-(defvar install-packages '(magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8 auctex expand-region flycheck discover-my-major))
-(setq install-packages '(magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8 auctex expand-region flycheck discover-my-major))
-(dolist (pack install-packages)
-  (unless (package-installed-p pack)
-    (progn (refresh-packages) (package-install pack))
-    ))
+(refresh-packages)
 
 
-;; Solarized color theme
-(add-to-list 'load-path "~/.emacs.d/colors/emacs-color-theme-solarized")
-(require 'color-theme-solarized)
-  (eval-after-load "color-theme-solarized"
-   '(progn
-      (color-theme-initialize)
-      (color-theme-solarized-dark)))
+
+(if (not (package-installed-p 'use-package))
+    (progn
+      (package-refresh-contents)
+      (package-install 'use-package)))
+
+(require 'use-package)
+
+
+(use-package magit
+  :bind ("C-x m" . magit-status)
+  :ensure t)
+
+(use-package git-gutter
+  :init (global-git-gutter-mode t)
+  :ensure t)
+
+(use-package smex
+  :bind (("M-x" . smex)
+	 ("M-X" . smex-major-mode-commands))
+  :ensure t)
+
+(use-package undo-tree
+  :init (global-undo-tree-mode 1)
+  :ensure t)
+
+(use-package switch-window
+  :bind ("C-x o" . switch-window)
+  :ensure t)
+
+(use-package jedi
+  :defer t
+  :ensure t)
+
+(use-package ein
+  :defer t
+  :ensure t)
+
+(use-package smartparens
+  :defer t
+  :ensure t)
+
+(use-package fill-column-indicator
+  :config (setq-default fill-column 80
+			indent-tabs-mode nil)
+  :ensure t)
+
+(use-package py-autopep8
+  :defer t
+  :ensure t)
+
+(use-package auctex
+  :defer t
+  :ensure t)
+
+;;; Expand-region
+(use-package expand-region
+  :bind ("M-m" . er/expand-region)
+  :ensure t)
+
+(use-package flycheck
+  :init (add-hook 'after-init-hook #'global-flycheck-mode)
+  :ensure t)
+
+(use-package org-drill
+  :defer t
+  :ensure f)
+
+;; (use-package discover-my-major
+;;   :config ((global-unset-key (kbd "C-h h"))        ; original "C-h h" displays "hello world" in different languages
+;;            (define-key 'help-command (kbd "h m") 'discover-my-major))
+;;   :ensure t)
+
+(use-package color-theme :ensure t)
+(use-package color-theme-solarized
+  :init (color-theme-solarized-dark)
+  :ensure t)
 
 (add-hook 'shell-mode-hook 
           'ansi-color-for-comint-mode-on)
@@ -114,7 +177,7 @@
     (setq eshell-ask-to-save-history 'always)) ; For older(?) version
 ;(message "eshell-ask-to-save-history is %s" eshell-ask-to-save-history)
 
-(require 'magit)
+;(require 'magit)
 (global-unset-key (kbd "C-x g"))
 (global-set-key (kbd "C-x g h") 'magit-log)
 (global-set-key (kbd "C-x g f") 'magit-file-log)
@@ -146,7 +209,6 @@
 
 ;; Disable irrelevant stuff
 (tool-bar-mode -1)
-;; (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (tooltip-mode -1)
 (blink-cursor-mode -1)
@@ -189,6 +251,7 @@ With argument, do this that many times."
 (global-set-key (kbd "M-d") 'delete-word)
 
 ;; visual window switching
+(add-to-list 'load-path "~/.emacs.d/switch-window-master")
 (require 'switch-window)
 (global-set-key (kbd "C-x o") 'switch-window)
 
@@ -209,20 +272,6 @@ With argument, do this that many times."
     (setq exec-path (split-string path-from-shell path-separator))))
 
 (when window-system (set-exec-path-from-shell-PATH))
-
-
-;; Standard el-get setup
-;; (See also: https://github.com/dimitri/el-get#basic-setup)
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-    (goto-char (point-max))
-    (eval-print-last-sexp)))
-
-(el-get 'sync)
 
 
 ;; Python
@@ -312,11 +361,6 @@ With argument, do this that many times."
   '((python . t)
      (emacs-lisp . t)))
 
-;; git
-(global-git-gutter-mode t)
-
-;; Undo
-(global-undo-tree-mode)
 
 ;; C-x k: kill current buffer without asking
 (defun kill-this-buffer ()
@@ -324,7 +368,7 @@ With argument, do this that many times."
   (kill-buffer (current-buffer)))
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
-(require 'org-drill)
+
 
 ;; Use squid proxy
 ;(setq url-proxy-services '(("http" . "10.2.129.209:3128")))
@@ -361,29 +405,6 @@ With argument, do this that many times."
 ;; press F8 on keypad to lookup dictionary definition
 (global-set-key (kbd "<f8>") 'dictionary-lookup-definition)
 
-;; ;; Org-mode allow relative file refiling
-;; ;; any headline with level <= 2 is a target
-;; (setq org-refile-targets '((nil :maxlevel . 2)
-;;                                 ; all top-level headlines in the
-;;                                 ; current buffer are used (first) as a
-;;                                 ; refile target
-;;                            (org-agenda-files :maxlevel . 2)))
-
-;; ;; provide refile targets as paths, including the file name
-;; ;; (without directory) as level 1 of the path
-;; (setq org-refile-use-outline-path 'file)
-
-;; ;; allow to create new nodes (must be confirmed by the user) as
-;; ;; refile targets
-;; (setq org-refile-allow-creating-parent-nodes 'confirm)
-
-;; ;; refile only within the current buffer
-;; (defun my/org-refile-within-current-buffer ()
-;;   "Move the entry at point to another heading in the current buffer."
-;;   (interactive)
-;;   (let ((org-refile-targets '((nil :maxlevel . 5))))
-;;     (org-refile)))
-
 ;; Stop a currently running clock on killing emacs
 (defun org-clock-out-maybe ()
      (org-clock-out nil t)
@@ -391,7 +412,7 @@ With argument, do this that many times."
 (add-hook 'kill-emacs-hook 'org-clock-out-maybe)
 
 ;; Enable agressive-indent in python and lisp modes
-(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+;; (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 ;; (add-hook 'python-mode-hook #'aggressive-indent-mode) ;; conflicts with autopep8
 
 ;; (add-to-list 'load-path "~/.emacs.d/elpa/auctex-11.88")
@@ -418,4 +439,12 @@ With argument, do this that many times."
 (setq org-mobile-files '("~/org"))
 (setq org-mobile-directory "~/Dropbox/MobileOrg")
 
+;; collaborative editing
+(global-rudel-minor-mode 1)
+
+;; (add-to-list 'load-path "~/.emacs.d/elpa/rudel-0.3")
+(load-file "~/.emacs.d/elpa/rudel-0.3/rudel-loaddefs.el") ;; this should already be there, maybe just similar
+(require 'rudel-zeroconf)
+(require 'rudel-infinote)
+(require 'rudel-obby)
 
