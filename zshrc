@@ -85,7 +85,7 @@ if [[ $HOSTNAME = "spselc3a" ]]; then
    fi	
 fi
 
-#source /opt/OpenFOAM/OpenFOAM-2.2.2/etc/bashrc
+source /opt/OpenFOAM/OpenFOAM-2.3.1/etc/bashrc
 
 export PATH=$PATH:~/Downloads/git-annex.linux:/home/adam/Downloads/git-fat-master
 
@@ -111,3 +111,4 @@ xdg-mime default okularApplication_pdf.desktop application/pdf
 # enable sysrq commands such as: Alt+SysRq+e
 #sysctl kernel.sysrq=1
 
+alias pandoc=~/.cabal/bin/pandoc
