@@ -17,8 +17,8 @@ numlockx &
 # run xrandr script
 bash ~/.i3/detect_displays.sh
 
-exec i3
-#exec startxfce4
+#exec i3
+exec startxfce4
 
 # automount usb
 # udiskie -s &

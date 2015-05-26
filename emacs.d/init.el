@@ -89,6 +89,10 @@
   :defer t
   :ensure f)
 
+(use-package csv-mode
+  :defer t
+  :ensure f)
+
 ;; (use-package discover-my-major
 ;;   :config ((global-unset-key (kbd "C-h h"))        ; original "C-h h" displays "hello world" in different languages
 ;;            (define-key 'help-command (kbd "h m") 'discover-my-major))
@@ -302,8 +306,7 @@ With argument, do this that many times."
 ; try to automagically figure out indentation
 (setq py-smart-indentation t)
 
-
-(set-frame-font "-xos4-terminus-medium-r-normal--14-140-*-*-*-*-*-*" nil t)
+;(set-frame-font "-xos4-terminus-medium-r-normal--14-140-*-*-*-*-*-*" nil t)
 
 (add-to-list 'load-path "~/.emacs.d/el-get/ein/lisp")
 (require 'ein)
@@ -437,14 +440,6 @@ With argument, do this that many times."
 (setq org-directory "~/org")
 (setq org-agenda-files '("~/org/notes.org"))
 (setq org-mobile-files '("~/org"))
-(setq org-mobile-directory "~/Dropbox/MobileOrg")
+;(setq org-mobile-directory "~/Dropbox/MobileOrg")
 
-;; collaborative editing
-(global-rudel-minor-mode 1)
-
-;; (add-to-list 'load-path "~/.emacs.d/elpa/rudel-0.3")
-(load-file "~/.emacs.d/elpa/rudel-0.3/rudel-loaddefs.el") ;; this should already be there, maybe just similar
-(require 'rudel-zeroconf)
-(require 'rudel-infinote)
-(require 'rudel-obby)
 

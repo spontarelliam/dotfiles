@@ -112,3 +112,4 @@ xdg-mime default okularApplication_pdf.desktop application/pdf
 #sysctl kernel.sysrq=1
 
 alias pandoc=~/.cabal/bin/pandoc
+
