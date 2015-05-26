@@ -103,6 +103,7 @@
   :init (color-theme-solarized-dark)
   :ensure t)
 
+
 (add-hook 'shell-mode-hook 
           'ansi-color-for-comint-mode-on)
 (custom-set-variables
@@ -110,6 +111,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "1297a022df4228b81bc0436230f211bad168a117282c20ddcba2db8c6a200743" "8db4b03b9ae654d4a57804286eb3e332725c84d7cdab38463cb6b97d5762ad26" default)))
  '(org-agenda-files (quote ("~/org/notes.org")))
  '(org-drill-optimal-factor-matrix
    (quote
@@ -120,9 +124,6 @@
       (2.1799999999999997 . 3.72)
       (1.96 . 3.58)
       (2.6 . 4.14)))))
- '(org-modules
-   (quote
-    (org-bbdb org-bibtex org-docview org-gnus org-info org-jsinfo org-irc org-mew org-mhe org-rmail org-vm org-wl org-w3m org-drill org-learn)))
  '(vc-follow-symlinks t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -277,18 +278,17 @@ With argument, do this that many times."
 
 (when window-system (set-exec-path-from-shell-PATH))
 
-
 ;; Python
 ;; Standard Jedi.el setting
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+;; (add-hook 'python-mode-hook 'jedi:setup)
+;; (setq jedi:complete-on-dot t)
 
 (add-hook 'python-mode-hook 'fci-mode)
 
 ;; Python IDE
 (setq py-install-directory "/home/smed/Downloads/python-mode.el-6.1.3")
 (add-to-list 'load-path py-install-directory)
-(require 'python-mode)
+;(require 'python-mode)
 
 ;; use IPython
 (setq-default py-shell-name "ipython")
@@ -305,6 +305,7 @@ With argument, do this that many times."
 ;; (setq py-split-windows-on-execute-p nil)
 ; try to automagically figure out indentation
 (setq py-smart-indentation t)
+
 
 ;(set-frame-font "-xos4-terminus-medium-r-normal--14-140-*-*-*-*-*-*" nil t)
 
@@ -414,9 +415,6 @@ With argument, do this that many times."
      (org-save-all-org-buffers))
 (add-hook 'kill-emacs-hook 'org-clock-out-maybe)
 
-;; Enable agressive-indent in python and lisp modes
-;; (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-;; (add-hook 'python-mode-hook #'aggressive-indent-mode) ;; conflicts with autopep8
 
 ;; (add-to-list 'load-path "~/.emacs.d/elpa/auctex-11.88")
 ;; (load "auctex.el" nil t t)
@@ -424,6 +422,8 @@ With argument, do this that many times."
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq-default TeX-master nil)
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+(setq reftex-plug-into-AUCTeX t)
 
 ;; select text objects incrementally
 (require 'expand-region)
@@ -440,6 +440,17 @@ With argument, do this that many times."
 (setq org-directory "~/org")
 (setq org-agenda-files '("~/org/notes.org"))
 (setq org-mobile-files '("~/org"))
-;(setq org-mobile-directory "~/Dropbox/MobileOrg")
+(setq org-mobile-directory "~/Dropbox/MobileOrg")
 
+(add-to-list 'load-path "~/.emacs.d/relap-mode")
+(require 'relap-mode)
+(require 'r5out-mode)
 
+(add-hook 'TeX-mode-hook
+          (lambda () (TeX-fold-mode 1))); automatically activate TeX-fold-mode
+(add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
+
+;; folding for auctex
+(add-hook 'outline-minor-mode-hook
+            (lambda () (local-set-key "\C-c\C-a"
+                                      outline-mode-prefix-map)))
