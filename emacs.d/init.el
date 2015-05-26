@@ -17,24 +17,23 @@
     (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
     (package-refresh-contents)
     )
-  )
+)
+
 
 ;; install necessary packages
-(defvar install-packages '(magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8 auctex expand-region flycheck discover-my-major))
-(setq install-packages '(magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8 auctex expand-region flycheck discover-my-major))
+(defvar install-packages '(magit git-gutter smex switch-window jedi ein smartparens undo-tree fill-column-indicator py-autopep8 auctex expand-region flycheck discover-my-major python-mode))
+;; (dolist (pack install-packages)
+;;   (unless (package-installed-p pack)
+;;     (progn (refresh-packages) (package-install pack))
+;;     ))
+
 (dolist (pack install-packages)
   (unless (package-installed-p pack)
-    (progn (refresh-packages) (package-install pack))
-    ))
+    (package-install pack)))
 
 
 ;; Solarized color theme
-(add-to-list 'load-path "~/.emacs.d/colors/emacs-color-theme-solarized")
-(require 'color-theme-solarized)
-  (eval-after-load "color-theme-solarized"
-   '(progn
-      (color-theme-initialize)
-      (color-theme-solarized-dark)))
+(load-theme 'solarized-dark t)
 
 (add-hook 'shell-mode-hook 
           'ansi-color-for-comint-mode-on)
@@ -43,6 +42,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "1297a022df4228b81bc0436230f211bad168a117282c20ddcba2db8c6a200743" "8db4b03b9ae654d4a57804286eb3e332725c84d7cdab38463cb6b97d5762ad26" default)))
  '(org-agenda-files (quote ("~/org/notes.org")))
  '(org-drill-optimal-factor-matrix
    (quote
@@ -53,9 +55,6 @@
       (2.1799999999999997 . 3.72)
       (1.96 . 3.58)
       (2.6 . 4.14)))))
- '(org-modules
-   (quote
-    (org-bbdb org-bibtex org-docview org-gnus org-info org-jsinfo org-irc org-mew org-mhe org-rmail org-vm org-wl org-w3m org-drill org-learn)))
  '(vc-follow-symlinks t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -213,29 +212,29 @@ With argument, do this that many times."
 
 ;; Standard el-get setup
 ;; (See also: https://github.com/dimitri/el-get#basic-setup)
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+;; (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-    (goto-char (point-max))
-    (eval-print-last-sexp)))
+;; (unless (require 'el-get nil 'noerror)
+;;   (with-current-buffer
+;;       (url-retrieve-synchronously
+;;        "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+;;     (goto-char (point-max))
+;;     (eval-print-last-sexp)))
 
-(el-get 'sync)
+;; (el-get 'sync)
 
 
 ;; Python
 ;; Standard Jedi.el setting
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+;; (add-hook 'python-mode-hook 'jedi:setup)
+;; (setq jedi:complete-on-dot t)
 
 (add-hook 'python-mode-hook 'fci-mode)
 
 ;; Python IDE
 (setq py-install-directory "/home/smed/Downloads/python-mode.el-6.1.3")
 (add-to-list 'load-path py-install-directory)
-(require 'python-mode)
+;(require 'python-mode)
 
 ;; use IPython
 (setq-default py-shell-name "ipython")
@@ -254,7 +253,7 @@ With argument, do this that many times."
 (setq py-smart-indentation t)
 
 
-(set-frame-font "-xos4-terminus-medium-r-normal--14-140-*-*-*-*-*-*" nil t)
+;; (set-frame-font "-xos4-terminus-medium-r-normal--14-140-*-*-*-*-*-*" nil t)
 
 (add-to-list 'load-path "~/.emacs.d/el-get/ein/lisp")
 (require 'ein)
@@ -324,7 +323,7 @@ With argument, do this that many times."
   (kill-buffer (current-buffer)))
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
-(require 'org-drill)
+
 
 ;; Use squid proxy
 ;(setq url-proxy-services '(("http" . "10.2.129.209:3128")))
@@ -391,7 +390,7 @@ With argument, do this that many times."
 (add-hook 'kill-emacs-hook 'org-clock-out-maybe)
 
 ;; Enable agressive-indent in python and lisp modes
-(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+;;(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 ;; (add-hook 'python-mode-hook #'aggressive-indent-mode) ;; conflicts with autopep8
 
 ;; (add-to-list 'load-path "~/.emacs.d/elpa/auctex-11.88")
@@ -400,6 +399,8 @@ With argument, do this that many times."
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq-default TeX-master nil)
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+(setq reftex-plug-into-AUCTeX t)
 
 ;; select text objects incrementally
 (require 'expand-region)
@@ -418,4 +419,18 @@ With argument, do this that many times."
 (setq org-mobile-files '("~/org"))
 (setq org-mobile-directory "~/Dropbox/MobileOrg")
 
+(add-to-list 'load-path "~/.emacs.d/relap-mode")
+(require 'relap-mode)
+(require 'r5out-mode)
 
+;home
+;(require 'org-drill)
+
+(add-hook 'TeX-mode-hook
+          (lambda () (TeX-fold-mode 1))); automatically activate TeX-fold-mode
+(add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
+
+;; folding for auctex
+(add-hook 'outline-minor-mode-hook
+            (lambda () (local-set-key "\C-c\C-a"
+                                      outline-mode-prefix-map)))
