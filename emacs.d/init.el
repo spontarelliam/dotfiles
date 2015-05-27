@@ -93,6 +93,10 @@
   :defer t
   :ensure f)
 
+(use-package popup
+  :defer t
+  :ensure f)
+
 ;; (use-package discover-my-major
 ;;   :config ((global-unset-key (kbd "C-h h"))        ; original "C-h h" displays "hello world" in different languages
 ;;            (define-key 'help-command (kbd "h m") 'discover-my-major))
